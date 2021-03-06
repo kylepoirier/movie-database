@@ -15,7 +15,7 @@ const server = http.createServer(function (request, response) {
 	//console.log(request.method);
 	if(request.method === "GET"){
         let movieTitle = request.url;
-		movieTitle = movieID.split("/")[2];
+		movieTitle = movieTitle.split("/")[2];
 		
 		if(request.url === "/" || request.url === "/index.pug"){
             console.log(movies);
