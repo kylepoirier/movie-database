@@ -4,11 +4,11 @@ html
     head
         title Movie - #{movie.Title}
 body
-
+    include .\header
     div#main
         h1 #{movie.name}
         div#img
-            img(movie.Poster)
+            img(src = movie.Poster)
         div#info
             h3 Movie Info: 
             b Plot: #{movie.Plot}

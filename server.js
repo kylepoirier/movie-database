@@ -4,12 +4,24 @@ const pug = require('pug');
 //Set up the required data
 let movieData = require("./movie-data-10.json");
 let movies = {}; //Stores all of the cards, key=id
-
+let returnedMovie = {};
 let nextID=0;
 movieData.forEach(movie => {
 	movies[nextID++] = movie;
 });
 
+function returnMovie(movieName){
+    let searchArray = movieData.filter(function(obj){
+
+        let objTitle = obj.Title;
+        if(objTitle===movieName){
+            return obj;
+        }
+    });
+    searchArray.forEach(movie=>{
+        returnedMovie[0] = movie;
+    });
+}
 //Initialize server
 const server = http.createServer(function (request, response) {
 	//console.log(request.method);
@@ -18,25 +30,22 @@ const server = http.createServer(function (request, response) {
 		movieTitle = movieTitle.split("/")[2];
 		
 		if(request.url === "/" || request.url === "/index.pug"){
-            console.log(movies);
+            //console.log(movies);
 			let data = pug.renderFile("index.pug", {movies: movies});
 			response.statusCode = 200;
 			response.end(data);
 			return;
 		}
 		if(request.url === "/movie/"+movieTitle){
-			if(movies.hasOwnProperty(movieTitle)){
-				let data = pug.renderFile("movie.pug",{movie:movies[movieID]});
-				response.statusCode = 200;
-				response.end(data);
-				return;
+            movieTitle = decodeURI(movieTitle);
+            returnMovie(movieTitle);
+            //console.log(movie);
+			let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
+			response.statusCode = 200;
+			response.end(data);
+			return;
 				
-			}
-			else{
-				response.statusCode =404;
-				response.end("ERROR MOVIE NOT FOUND");
-				return;
-			}		
+					
 		}
 	}
 
