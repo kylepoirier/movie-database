@@ -1,0 +1,13 @@
+doctype html
+
+html
+    head
+        title PogChamp moviesDB
+body
+
+    div#main
+        h1 PogChamp moviesDB
+        h2 List of Movies:
+        each movie in movies
+            a(href="/movies/" + movie.id) #{movie.name +"  "+"("+movie.id+")"}
+            br
