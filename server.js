@@ -9,7 +9,7 @@ let nextID=0;
 movieData.forEach(movie => {
 	movies[nextID++] = movie;
 });
-console.log(movies);
+
 //Initialize server
 const server = http.createServer(function (request, response) {
 	console.log(request.method);
