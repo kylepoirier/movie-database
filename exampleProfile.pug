@@ -1,0 +1,20 @@
+doctype html
+
+html
+    head
+        title Your Profile
+body
+    include .\header
+    div#main
+        h1 Username: Kyle_PS
+    div#userType
+        input(type='radio', name='regular', value='1')#wnr1
+        label(for='regular')
+        span.
+            Regular 
+        br
+        input(type='radio', name='contributing', value='2')#wnr2
+        label(for='contributing')
+        span.
+            Contributing
+        br
