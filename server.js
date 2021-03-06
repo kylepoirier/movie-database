@@ -43,10 +43,14 @@ const server = http.createServer(function (request, response) {
 			let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
 			response.statusCode = 200;
 			response.end(data);
-			return;
-				
-					
+			return;		
 		}
+        if(request.url === "/profile"){
+            let data = pug.renderFile("exampleProfile.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;	
+        }
 	}
 
 
