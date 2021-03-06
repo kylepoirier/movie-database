@@ -6,11 +6,13 @@ html
 body
     include .\header
     div#main
-        h1 #{movie.Title}
+        h1 #{movie.name}
         div#img
             img(src = movie.Poster)
         div#info
             h3 Movie Info: 
+            b Plot: #{movie.Plot}
+            br
             b Year: #{movie.Year}
             br
             b Rated: #{movie.Rated}
@@ -20,4 +22,17 @@ body
             b Runtime: #{movie.Runtime} 
             br 
             b Genre: #{movie.Genre}
-        
+            br
+        div#people
+            h2 Credits: 
+            b Director: #{movie.Director}
+            br
+            b Writer: #{movie.Writer}
+            br
+            b Actors: #{movie.Actors}
+            br
+        div#awards
+            h3 Awards: 
+            b #{movie.Awards} 
+
+            
