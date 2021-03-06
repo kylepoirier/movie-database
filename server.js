@@ -12,17 +12,20 @@ movieData.forEach(movie => {
 
 //Initialize server
 const server = http.createServer(function (request, response) {
-	console.log(request.method);
+	//console.log(request.method);
 	if(request.method === "GET"){
-		if(request.url === "/" || request.url === "/index.html"){
-
+        let movieTitle = request.url;
+		movieTitle = movieID.split("/")[2];
+		
+		if(request.url === "/" || request.url === "/index.pug"){
+            console.log(movies);
 			let data = pug.renderFile("index.pug", {movies: movies});
 			response.statusCode = 200;
 			response.end(data);
 			return;
 		}
-		if(request.url === "/movie/"+movieID){
-			if(movies.hasOwnProperty(movieID)){
+		if(request.url === "/movie/"+movieTitle){
+			if(movies.hasOwnProperty(movieTitle)){
 				let data = pug.renderFile("movie.pug",{movie:movies[movieID]});
 				response.statusCode = 200;
 				response.end(data);
@@ -31,7 +34,7 @@ const server = http.createServer(function (request, response) {
 			}
 			else{
 				response.statusCode =404;
-				response.end("ERROR CARD NOT FOUND");
+				response.end("ERROR MOVIE NOT FOUND");
 				return;
 			}		
 		}
