@@ -1,0 +1,23 @@
+doctype html
+
+html
+    head
+        title Movie - #{movie.title}
+body
+
+    div#main
+        h1 #{movie.name}
+        div#img
+            img(movie.poster)
+        div#info
+            h3 Movie Info: 
+            b Year: #{movie.year}
+            br
+            b Rated: #{movie.rated}
+            br
+            b Released: #{movie.released}
+            br
+            b Runtime: #{movie.runtime} 
+            br 
+            b Genre: #{movie.genre}
+        
