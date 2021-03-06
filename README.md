@@ -1,2 +1,9 @@
 # movie-database
-movie database for COMP2406 by Kyle Poirier-Szekely &amp; Kaushik Paul
+## **TODO**
+
+- [ ] Stuff
+- [ ] Stuff
+- [ ] Stuff
+
+*If anyone has any other ideas/tasks please feel free to add them*
+
