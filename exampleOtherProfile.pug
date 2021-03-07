@@ -1,0 +1,40 @@
+doctype html
+
+html
+    head
+        title Your Profile
+body
+    include .\header
+    div#main
+        h1 Username: Other Profile
+    div#followingPeople
+        h2 Following: 
+        a(href='/person')  Tom Cruise
+        br
+        a(href='/person')  Bernie Sanders
+        br
+        a(href='/person')  Chadwick Boseman
+
+    div#followingUser
+        h2 Users Following: 
+        a(href='/profile')  Kaushik_P
+        br
+        a(href='/profile')  DAVE_MCK
+        br
+        a(href='/profile')  Elon_MusKrat
+
+    div#WatchList
+        h3 Watch List: 
+        a(href='/movie/The%20Ballad%20of%20Cable%20Hogue')  The Ballad of Cable Hogue
+        br
+        a(href='/movie/An%20American%20Tail:%20Fievel%20Goes%20West')  An American Tail: Fievel Goes West
+        br
+        a(href='/movie/The%20Incredible%20Mr.%20Limpet')  The Incredible Mr. Limpet
+        br
+
+    div#Recommends 
+        h4 Recommended Movies: 
+        a(href='/movie/SomeRandonMovie')  SomeRandonMovie
+        br
+        a(href='/movie/SomeRandonMovie2')  SomeRandonMovie2
+        br

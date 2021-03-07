@@ -1,0 +1,41 @@
+doctype html
+
+html
+    head
+        title Your Profile
+body
+    include .\header
+    div#main
+        h1 Name: Super Random Person
+        button(name = 'person1',onclick='unfollow(personID)') Unfollow
+
+    div#Collaborator
+        h2 Frequent Collaborator
+        a(href='/profile')  Kyle_PS
+        br
+        a(href='/profile')  Kaushik_P
+        br
+        a(href='/profile')  Elon_Muskrat
+        br
+
+    div#history
+        h2 Work History: 
+
+        h3 Writer:
+        a(href='/movie/The%20Ballad%20of%20Cable%20Hogue')  The Ballad of Cable Hogue
+        br
+        a(href='/movie/An%20American%20Tail:%20Fievel%20Goes%20West')  An American Tail: Fievel Goes West
+        br
+        a(href='/movie/The%20Incredible%20Mr.%20Limpet')  The Incredible Mr. Limpet
+        br
+
+        h4 Director: 
+        a(href='/movie/House%20of%20Games') House of Games
+        br
+        a(href='/movie/The%20Godfather:%20Part%20II') The Godfather: Part II
+        br
+        h5 Actor:
+        a(href='/movie/Little%20Women') Little Women
+        br
+        a(href='/movie/Woman%20on%20Top') Woman on Top
+        br

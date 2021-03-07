@@ -28,7 +28,7 @@ body
             b Genre:
             each genre in movie.Genre
                 br
-                a(href="/genre/" + genre) #{genre}
+                a(href="/genre") #{genre}
             br
             br
         div#people
@@ -36,19 +36,19 @@ body
             b Director:
             each director in movie.Director 
                 br
-                a(href="/person/" + director) #{director}
+                a(href="/person") #{director}
             br
             br
             b Writer:
             each writer in movie.Writer
                 br
-                a(href="/person/" + writer) #{writer}
+                a(href="/person") #{writer}
             br
             br
             b Actors:
             each actor in movie.Actors 
                 br
-                a(href="/person/" + actor) #{actor}
+                a(href="/person") #{actor}
             br
         div#awards
             h4 Awards: 
