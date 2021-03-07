@@ -58,11 +58,26 @@ body
             p 10/10 Smelled great! 
                 a(href="/reviews") View Details
             
-            p Review Score:
-                input(type="text" name="reviewScore" placeholder="")
-            p Summary Review:
-                input(type="text" name="sumReview" placeholder="")
-            p Full Review Text:
-                input(type="text" name="fullReview" placeholder="")
+            label(for='reviewScore')
+            span.
+                Review Score: 
+            input(type="text" name="reviewScore" placeholder=" " size="1")
+            button(name ='basicReview',onclick='basicReview(input)') Submit Basic Review
+            br
+            br
+            label(for='sumReview')
+            span.
+                Review Summary: 
+            input(type="text" name="sumReview" placeholder="")
+            br
+            br
+            label(for='fullReview')
+            span.
+                Full Review Text: 
+            input(type="text" name="bFullReview" placeholder="")
+            br
+            br
+            button(name ='bFullReview',onclick='fullReview(input)') Submit Full Review
+            
 
             
