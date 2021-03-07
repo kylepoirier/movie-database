@@ -51,6 +51,18 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;	
         }
+        if(request.url === "/profile"){
+            let data = pug.renderFile("exampleOtherProfile.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;	
+        }
+        if(request.url === "/person"){
+            let data = pug.renderFile("examplePerson.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
 	}
 
 

@@ -24,13 +24,13 @@ body
 
     div#followingPeople
         h2 People you follow: 
-        button(name = 'person1',onclick='unfollow(userID)') Unfollow
+        button(name = 'person1',onclick='unfollow(personID)') Unfollow
         a(href='/person')  Tom Cruise
         br
-        button(name = 'person2',onclick='unfollow(userID)') Unfollow
+        button(name = 'person2',onclick='unfollow(personID)') Unfollow
         a(href='/person')  Bernie Sanders
         br
-        button(name = 'person3',onclick='unfollow(userID)') Unfollow
+        button(name = 'person3',onclick='unfollow(personID)') Unfollow
         a(href='/person')  Chadwick Boseman
 
     div#followingUser
@@ -45,5 +45,31 @@ body
         a(href='/profile')  Elon_MusKrat
 
     div#WatchList
-        h3 WatchList 
+        h3 Watch List: 
+        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
+        a(href='/movie/The%20Ballad%20of%20Cable%20Hogue')  The Ballad of Cable Hogue
+        br
+        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
+        a(href='/movie/An%20American%20Tail:%20Fievel%20Goes%20West')  An American Tail: Fievel Goes West
+        br
+        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
+        a(href='/movie/The%20Incredible%20Mr.%20Limpet')  The Incredible Mr. Limpet
+        br
+
+    div#Recommends 
+        h4 Recommended Movies: 
+        a(href='/movie/SomeRandonMovie')  SomeRandonMovie
+        br
+        a(href='/movie/SomeRandonMovie2')  SomeRandonMovie2
+        br
         
+    div#notifications 
+        h5 Notification Center: 
+        button(name = 'movie1',onclick='removeElement(elementID)') Delete
+        button(name = 'movie1',onclick='viewNotif(notifID)') View
+        b  Kaushik_P added a new movie
+
+        br
+        button(name = 'movie1',onclick='removeElement(elementID)') Delete
+        button(name = 'movie1',onclick='viewNotif(notifID)') View
+        b  Elon_Musk added a new review
