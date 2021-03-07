@@ -63,6 +63,16 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;
         }
+        if (request.url === "/reviews"){
+            let data = pug.renderFile("exampleReview.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
+
+        if(request.url === "/search"){
+            
+        }
 	}
 
 
