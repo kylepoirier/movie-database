@@ -45,7 +45,7 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;		
 		}
-        if(request.url === "/profile"){
+        if(request.url === "/ownProfile"){
             let data = pug.renderFile("exampleProfile.pug");
 			response.statusCode = 200;
 			response.end(data);

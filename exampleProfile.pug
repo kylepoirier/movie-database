@@ -18,3 +18,32 @@ body
         span.
             Contributing
         br
+        button(onclick='updateUser()') Save
+        br
+        br
+
+    div#followingPeople
+        h2 People you follow: 
+        button(name = 'person1',onclick='unfollow(userID)') Unfollow
+        a(href='/person')  Tom Cruise
+        br
+        button(name = 'person2',onclick='unfollow(userID)') Unfollow
+        a(href='/person')  Bernie Sanders
+        br
+        button(name = 'person3',onclick='unfollow(userID)') Unfollow
+        a(href='/person')  Chadwick Boseman
+
+    div#followingUser
+        h2 Users you follow: 
+        button(name = 'user1',onclick='unfollow(userID)') Unfollow
+        a(href='/profile')  Kaushik_P
+        br
+        button(name = 'user2',onclick='unfollow(userID)') Unfollow
+        a(href='/profile')  DAVE_MCK
+        br
+        button(name = 'user3',onclick='unfollow(userID)') Unfollow
+        a(href='/profile')  Elon_MusKrat
+
+    div#WatchList
+        h3 WatchList 
+        
