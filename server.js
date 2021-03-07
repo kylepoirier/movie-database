@@ -63,8 +63,41 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;
         }
-	}
+        if (request.url === "/reviews"){
+            let data = pug.renderFile("exampleReview.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
 
+        if(request.url === "/search"){
+            let data = pug.renderFile("search.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
+        if(request.url === "/creation"){
+            let data = pug.renderFile("creation.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
+
+	}
+    if(request.method === "POST"){
+        if(request.url==="/searchresults?"){
+            let searchResults = movies;
+            let data = pug.renderFile("resultsExample.pug",{movies:searchResults});
+			response.statusCode = 200;
+			response.end(data);
+			return;
+        }
+        if(request.url==="/createAccount?"  || request.url==="/login?" ){
+			response.statusCode = 200;
+			response.end("Created/Logged In Requested!");
+			return;
+        }
+    }
 
 	else{
 		response.statusCode = 404;
