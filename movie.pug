@@ -1,4 +1,5 @@
 doctype html
+html(lang='en')
 
 html
     head
@@ -6,9 +7,11 @@ html
 body
     include .\header
     div#main
-        h1 #{movie.Title}
+        h2 #{movie.Title}
         div#img
             img(src = movie.Poster)
+            br
+            button(name ='add_watchlist',onclick='add_watchlist(movie.Title)') Add to Watchlist
         div#info
             h3 Movie Info: 
             b Plot: #{movie.Plot}
@@ -29,7 +32,7 @@ body
             br
             br
         div#people
-            h2 Credits: 
+            h3 Credits: 
             b Director:
             each director in movie.Director 
                 br
@@ -48,7 +51,18 @@ body
                 a(href="/person/" + actor) #{actor}
             br
         div#awards
-            h3 Awards: 
+            h4 Awards: 
             b #{movie.Awards} 
+        div#reviews 
+            h3 Reviews:
+            p 10/10 Smelled great! 
+                a(href="/reviews") View Details
+            
+            p Review Score:
+                input(type="text" name="reviewScore" placeholder="")
+            p Summary Review:
+                input(type="text" name="sumReview" placeholder="")
+            p Full Review Text:
+                input(type="text" name="fullReview" placeholder="")
 
             
