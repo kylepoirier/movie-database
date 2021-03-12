@@ -5,3 +5,24 @@ body {
     background-color: #FFD8B2;
     color:#FF7F4A;
 }
+h1{
+    color:#bf616a;
+}
+body {
+    background-color: #2e3440;
+    color:#EBCB8B;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    text-align: center;
+}
+label{
+    width: 100px;
+    display:inline-block;
+}
+a:link {
+    color: #88c0d0;
+}
+
+a:visited {
+    color: #b48ead;
+}

@@ -1,16 +1,21 @@
 h1{
-    color:#CB5B44
+    color:#bf616a;
 }
 body {
-    background-color: #FFD8B2;
-    color:#FF7F4A;
+    background-color: #2e3440;
+    color:#EBCB8B;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    text-align: center;
 }
-
+label{
+    width: 80px;
+    display:inline-block;
+}
 a:link {
-    color: #1A817C;
+    color: #88c0d0;
 }
 
 a:visited {
-    color: #1A817C;
-
+    color: #b48ead;
 }
