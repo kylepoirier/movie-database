@@ -1,9 +1,8 @@
 # movie-database
-## **TODO**
 
-- [ ] Stuff
-- [ ] Stuff
-- [ ] Stuff
+Kyle Poirier Szekely - 101104274
+Kaushik Paul - 101158930
 
-*If anyone has any other ideas/tasks please feel free to add them*
 
+Instructions
+-> Run "node .\server.js" in console and go to http://localhost:3000/
