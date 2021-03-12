@@ -1,0 +1,41 @@
+doctype html
+html(lang='en')
+
+html
+    head
+        title Contribute
+body
+    include .\header
+    br
+    br
+    b Add an Actor:
+    br
+<form action="/addActor?" method="POST">
+    <label for="actorName">Actor Name:   </label>
+    <input id="actorName" type="text" name="actorName-field">
+    <input type="submit" value="Add Actor">
+</form>
+br
+b Add a Movie:
+br
+<form action="/addMovie?" method="POST">
+    <label for="title">Title:   </label>
+    <input id="title" type="text" name="title-field">
+    br
+    <label for="runtime">Runtime: </label>
+    <input id="runtime" type="text" name="runtime-field">
+    br
+    <label for="releaseYear">Release Year: </label>
+    <input id="releaseYear" type="text" name="releaseYear-field">
+    br
+    <label for="writes">Writes: </label>
+    <input id="writes" type="text" name="writes-field">
+    br
+    <label for="directors">Directors: </label>
+    <input id="directors" type="text" name="directors-field">
+    br
+    <label for="actors">Actors: </label>
+    <input id="actors" type="text" name="actors-field">
+    br
+    <input type="submit" value="Add Movie">
+</form>

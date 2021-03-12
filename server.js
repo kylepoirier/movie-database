@@ -83,6 +83,12 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;
         }
+		if (request.url === "/contribute") {
+			let data = pug.renderFile("contribute.pug");
+			response.statusCode = 200;
+			response.end(data);
+			return;
+		}
 
 	}
     if(request.method === "POST"){
@@ -98,6 +104,16 @@ const server = http.createServer(function (request, response) {
 			response.end("Created/Logged In Requested!");
 			return;
         }
+		if (request.url==="/addActor?") {
+			response.statusCode = 200;
+			response.end("Actor Added");
+			return;
+		}
+		if (request.url==="/addMovie?") {
+			response.statusCode = 200;
+			response.end("Movie Added");
+			return;
+		}
     }
 
 	else{
