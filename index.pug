@@ -11,8 +11,9 @@ body
     include .\header
     div#main
         h1 PogChamp movieDB
-        h2 List of Movies:
-        div#info
-            each movie in movies
-                a(href="/movie/" + movie.ID) #{movie.Title}
-                br
+        div#list
+            h2 List of Movies:
+            div#info
+                each movie in movies
+                    a(href="/movie/" + movie.ID) #{movie.Title}
+                    br

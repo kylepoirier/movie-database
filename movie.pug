@@ -33,28 +33,28 @@ body
                 a(href="/search") #{genre}
             br
             br
-        div#people
-            h3 Credits: 
-            b Director:
-            each director in movie.Director 
+            div#people
+                h3 Credits: 
+                b Director:
+                each director in movie.Director 
+                    br
+                    a(href="/person") #{director}
                 br
-                a(href="/person") #{director}
-            br
-            br
-            b Writer:
-            each writer in movie.Writer
                 br
-                a(href="/person") #{writer}
-            br
-            br
-            b Actors:
-            each actor in movie.Actors 
+                b Writer:
+                each writer in movie.Writer
+                    br
+                    a(href="/person") #{writer}
                 br
-                a(href="/person") #{actor}
-            br
-        div#awards
-            h4 Awards: 
-            b #{movie.Awards} 
+                br
+                b Actors:
+                each actor in movie.Actors 
+                    br
+                    a(href="/person") #{actor}
+                br
+            div#awards
+                h3 Awards: 
+                b #{movie.Awards} 
         div#reviews 
             h3 Reviews:
             p 10/10 Smelled great! 

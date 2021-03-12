@@ -1,16 +1,40 @@
-h1{
-    color:#CB5B44
+#movie{
+    color:#7996b9;
+    text-align: center;
+}
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width:300px; /* you can use % */
+    height: auto;
 }
 body {
-    background-color: #FFD8B2;
-    color:#FF7F4A;
+    background-color: #2e3440;
+    color:#EBCB8B;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
+    font-weight: 300;
+    text-align: center;
 }
 
 a:link {
-    color: #1A817C;
+    color: #88c0d0;
 }
 
 a:visited {
-    color: #1A817C;
-
+    color: #b48ead;
+}
+#review {
+    margin: auto;
+    width: 40%;
+    border: 3px solid #3b4252;
+    padding: 10px;
+    background-color: #434c5e;
+    text-align: left;
+}
+h2 {
+    text-align: center;
+}
+#reviewer { 
+    color:#8fbcbb;
 }
