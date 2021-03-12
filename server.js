@@ -114,7 +114,12 @@ const server = http.createServer(function (request, response) {
 			response.end("Movie Added");
 			return;
 		}
-		if (request.url === "/addReview?"){
+		if (request.url === "/addReview/basic?"){
+			response.statusCode = 200;
+			response.end("Review Added");
+			return;
+		}
+		if (request.url === "/addReview/full?"){
 			response.statusCode = 200;
 			response.end("Review Added");
 			return;
