@@ -3,7 +3,7 @@ const pug = require('pug');
 
 //Set up the required data
 let movieData = require("./movie-data-10.json");
-let movies = {}; //Stores all of the cards, key=id
+let movies = {}; //Stores all of the movies, key=id
 let returnedMovie = {};
 let nextID=0;
 movieData.forEach(movie => {

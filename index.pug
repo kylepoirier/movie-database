@@ -3,11 +3,15 @@ html(lang='en')
 
 html
     head
-        title PogChamp moviesDB
+        title PogChamp movieDB
+        style
+            include .\styles\index.css
+        
 body
     include .\header
     div#main
-        h1 PogChamp moviesDB
+        
+        h1 PogChamp movieDB
         h2 List of Movies:
         each movie in movies
             a(href="/movie/" + movie.ID) #{movie.Title}
