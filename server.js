@@ -7,14 +7,15 @@ let movies = {}; //Stores all of the cards, key=id
 let returnedMovie = {};
 let nextID=0;
 movieData.forEach(movie => {
+	movie.ID = nextID;
 	movies[nextID++] = movie;
 });
 
-function returnMovie(movieName){
+function returnMovie(ID){
     let searchArray = movieData.filter(function(obj){
 
-        let objTitle = obj.Title;
-        if(objTitle===movieName){
+        let objID = obj.ID;
+        if(objID==ID){
             return obj;
         }
     });
@@ -26,20 +27,20 @@ function returnMovie(movieName){
 const server = http.createServer(function (request, response) {
 	//console.log(request.method);
 	if(request.method === "GET"){
-        let movieTitle = request.url;
-		movieTitle = movieTitle.split("/")[2];
+        let para = request.url;
+		para = para.split("/")[2];
 		
 		if(request.url === "/" || request.url === "/index.pug"){
             //console.log(movies);
 			let data = pug.renderFile("index.pug", {movies: movies});
+			//console.log(movies);
 			response.statusCode = 200;
 			response.end(data);
 			return;
 		}
-		if(request.url === "/movie/"+movieTitle){
-            movieTitle = decodeURI(movieTitle);
-            returnMovie(movieTitle);
-            //console.log(movie);
+		if(request.url === "/movie/"+para){
+            movieTitle = decodeURI(para);
+            returnMovie(para);
 			let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
 			response.statusCode = 200;
 			response.end(data);
