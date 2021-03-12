@@ -114,6 +114,11 @@ const server = http.createServer(function (request, response) {
 			response.end("Movie Added");
 			return;
 		}
+		if (request.url === "/addReview?"){
+			response.statusCode = 200;
+			response.end("Review Added");
+			return;
+		}
     }
 
 	else{
