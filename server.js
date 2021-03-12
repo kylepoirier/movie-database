@@ -64,7 +64,7 @@ const server = http.createServer(function (request, response) {
 			response.end(data);
 			return;
         }
-        if (request.url === "/reviews"){
+        if (request.url === "/review"){
             let data = pug.renderFile("exampleReview.pug");
 			response.statusCode = 200;
 			response.end(data);
