@@ -1,16 +1,12 @@
-h1{
-    color:#CB5B44
-}
+
 body {
     background-color: #FFD8B2;
     color:#FF7F4A;
 }
-
-a:link {
-    color: #1A817C;
+div#header a{
+    background-color: #E5E9F0;
+    color: white;
+    padding: 1px;
+    text-decoration: none;
 }
 
-a:visited {
-    color: #1A817C;
-
-}
