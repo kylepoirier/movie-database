@@ -9,6 +9,8 @@ const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
+	loggedIn: false,
+	user: null,
     resave: true,
     saveUninitialized: true
 
@@ -43,8 +45,11 @@ function returnMovie(ID){
 app.get("/", async(req,res,next)=>{
 	let data = pug.renderFile("index.pug", {movies: movies});
 	res.status=200;
+	if(req.session.loggedIn){
+		console.log(req.session.user.name);
+	}
+	
 	res.send(data);
-	console.log(req.session.viewedMovies);
 });
 
 app.get("/movie/:movieID", async(req,res,next)=>{
@@ -115,17 +120,39 @@ app.post("/searchresults?",async (req,res,next)=>{
 
 app.post("/createAccount",async(req,res,next)=>{
 	let username = req.body.username;
-	let password = req.body.password; 
-	console.log(username);
-	console.log(password);
-	
+	let pass = req.body.password;
+	//Search first, if username does not exist in username database then add.
+	//If username does exist, alert to retry
+
+	let newUser = {
+		name: username,
+		password: pass,
+		type: false,
+		reviews: [],
+		watchlist: [],
+		followers: [],
+		following: [],
+		followingActors: []
+	}
+	req.session.loggedIn = true;
+	req.session.user = newUser;
+
 	res.statusCode = 200;
-	res.end("Creation Requested!");
+	let data = pug.renderFile("index.pug", {movies: movies});
+	res.send(data);
 });
 
-app.post("/login?",async(req,res,next)=>{
+app.post("/login",async(req,res,next)=>{
+	let username = req.body.username;
+	let password = req.body.password;
+	//Check database, if matches update sessions user/pass
+	//Allert if fail
+	req.session.loggedIn = true;
+	req.session.user = "RETURNED USER"
+
 	res.statusCode = 200;
-	res.end("Login Requested!");
+	let data = pug.renderFile("index.pug", {movies: movies});
+	res.send(data);
 });
 
 app.post("/addActor?",async(req,res,next)=>{
@@ -148,5 +175,17 @@ app.post("/addReview/full?",async(req,res,next)=>{
 	res.end("Review full addition Requested!");
 });
 
+app.get("/logout",async(req,res,next)=>{
+	if(!req.session.loggedIn){
+		console.log("Not Logged In");
+		res.statusCode = 200;
+		let data = pug.renderFile("creation.pug");
+		res.send(data);
+	}
+	req.session.loggedIn = false;
+	req.session.user=null;
+	res.statusCode = 200;
+	res.end("Logged out!");
+});
 app.listen(3000);
 console.log("Server listening at http://localhost:3000");
