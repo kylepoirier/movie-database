@@ -155,12 +155,45 @@ app.post("/login",async(req,res,next)=>{
 	res.send(data);
 });
 
-app.post("/addActor?",async(req,res,next)=>{
+app.post("/addActor",async(req,res,next)=>{
+	let actName = req.body.actorName;
+	//Check if actor exists in database, if so, cannot add, if not... add actor to database
+	let newAct = {
+		name:actName,
+		freqCol: [],
+		writer: [],
+		director: [],
+		actor: []
+	}
+
+	//add newAct to database
+	console.log(newAct);
+	//Refresh page to the actors profile
 	res.statusCode = 200;
 	res.end("Actor addition Requested!");
 });
 
-app.post("/addMovie?",async(req,res,next)=>{
+app.post("/addMovie",async(req,res,next)=>{
+
+	let newMovie = {
+		Title:req.body.title,
+		Year:req.body.releaseYear,
+		Rated:0,
+		Released:0,
+		Runtime: req.body.runtime,
+		Genre:"Empty",
+		Director: req.body.directors,
+		Writer: req.body.writers,
+		Actors: req.body.actors,
+		Plot: "Empty",
+		Awards: "Empty",
+		Poster: "Empty",
+		ID:nextID++,
+		reviews: "Empty"
+	}
+
+	//Add new movie to database
+	console.log(newMovie);
 	res.statusCode = 200;
 	res.end("Movie addition Requested!");
 });
