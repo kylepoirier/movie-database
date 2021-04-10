@@ -1,0 +1,27 @@
+{
+  "name": "Movie-Database",
+  "version": "1.0.0",
+  "description": "Kyle Poirier Szekely - 101104274\r Kaushik Paul - 101158930",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-session": "^1.17.1",
+    "pug": "^3.0.2"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kylepoirier/movie-database.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kylepoirier/movie-database/issues"
+  },
+  "homepage": "https://github.com/kylepoirier/movie-database#readme"
+}
