@@ -4,7 +4,7 @@ const express = require('express');
 let app = express();
 app.set("view engine", "pug");
 app.use(express.json());
-app.use(express.urlencoded());
+//app.use(express.urlencoded());
 const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
@@ -16,34 +16,25 @@ app.use(session({
 
 }));
 
+//Database variables
+let mongo = require('mongodb');
+let MongoClient = mongo.MongoClient;
+let db;
 
 //Set up the required data
-let movieData = require("./movie-data-10.json");
 const e = require('express');
-let movies = {}; //Stores all of the movies, key=id
 let returnedMovie = {};
-let nextID=0;
-movieData.forEach(movie => {
-	movie.ID = nextID;
-	movies[nextID++] = movie;
-});
 
-function returnMovie(ID){
-    let searchArray = movieData.filter(function(obj){
 
-        let objID = obj.ID;
-        if(objID==ID){
-            return obj;
-        }
-    });
-    searchArray.forEach(movie=>{
-        returnedMovie[0] = movie;
-    });
+async function returnMovie(id){
+	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
+	return results;
 }
-//Initialize server
 
+//Initialize server
 app.get("/", async(req,res,next)=>{
-	let data = pug.renderFile("index.pug", {movies: movies});
+	let displayMovies = await db.collection("movies").find().toArray();
+	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	if(req.session.loggedIn){
 		console.log(req.session.user.name);
@@ -60,7 +51,7 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 		req.session.viewedMovies = [req.params.movieID];
 	}
 	
-	returnMovie(req.params.movieID);
+	returnedMovie = await returnMovie(req.params.movieID);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
 	res.status=200;
 	res.send(data);
@@ -119,27 +110,36 @@ app.post("/searchresults?",async (req,res,next)=>{
 });
 
 app.post("/createAccount",async(req,res,next)=>{
-	let username = req.body.username;
+	let user = req.body.username;
 	let pass = req.body.password;
 	//Search first, if username does not exist in username database then add.
+	let users = await db.collection("users").find({name: user}).count();
+	console.log(users);
 	//If username does exist, alert to retry
-
-	let newUser = {
-		name: username,
-		password: pass,
-		type: false,
-		reviews: [],
-		watchlist: [],
-		followers: [],
-		following: [],
-		followingActors: []
+	if (users === 0) {
+		let newUser = {
+			name: user,
+			password: pass,
+			type: false,
+			reviews: [],
+			watchlist: [],
+			followers: [],
+			following: [],
+			followingActors: []
+		}
+		req.session.loggedIn = true;
+		req.session.user = newUser;
+	
+		res.statusCode = 200;
+		let data = pug.renderFile("exampleProfile.pug");
+		res.send(data);
+	} else {
+		res.statusCode = 200;
+		let data = pug.renderFile("creation.pug");
+		res.send(data);
+		console.log("ERROR: Username already exists");
 	}
-	req.session.loggedIn = true;
-	req.session.user = newUser;
-
-	res.statusCode = 200;
-	let data = pug.renderFile("index.pug", {movies: movies});
-	res.send(data);
+	
 });
 
 app.post("/login",async(req,res,next)=>{
@@ -220,5 +220,14 @@ app.get("/logout",async(req,res,next)=>{
 	res.statusCode = 200;
 	res.end("Logged out!");
 });
-app.listen(3000);
-console.log("Server listening at http://localhost:3000");
+// Initialize database connection
+MongoClient.connect("mongodb://localhost:27017/", function(err, client) {
+  if(err) throw err;
+
+  //Get the t8 database
+  db = client.db('database');
+
+  // Start server once Mongo is initialized
+  app.listen(3000);
+  console.log("Listening on port 3000");
+});
