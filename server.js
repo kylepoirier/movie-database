@@ -4,7 +4,7 @@ const express = require('express');
 let app = express();
 app.set("view engine", "pug");
 app.use(express.json());
-//app.use(express.urlencoded());
+app.use(express.urlencoded());
 const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
@@ -37,7 +37,7 @@ app.get("/", async(req,res,next)=>{
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	if(req.session.loggedIn){
-		console.log(req.session.user.name);
+		console.log(req.session.user);
 	}
 	
 	res.send(data);
@@ -59,9 +59,17 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 
 app.get("/ownProfile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
-	let data = pug.renderFile("exampleProfile.pug");
-	res.statusCode = 200;
-	res.end(data);
+	if(req.session.loggedIn){
+		let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
+		res.statusCode = 200;
+		res.end(data);
+	}
+	else{
+		let data = pug.renderFile("creation.pug");
+		res.statusCode = 200;
+		res.end(data);
+	}
+	
 });
 
 app.get("/profile/:profileID",async(req,res,next)=>{
@@ -113,10 +121,12 @@ app.post("/createAccount",async(req,res,next)=>{
 	let user = req.body.username;
 	let pass = req.body.password;
 	//Search first, if username does not exist in username database then add.
-	let users = await db.collection("users").find({name: user}).count();
+	console.log(req.body.username);
+
+	let users = await db.collection("users").find({name:user}).count();
 	console.log(users);
 	//If username does exist, alert to retry
-	if (users === 0) {
+	if (users === 0 && req.body.password.length!=0 && req.body.username !=0) {
 		let newUser = {
 			name: user,
 			password: pass,
@@ -129,15 +139,33 @@ app.post("/createAccount",async(req,res,next)=>{
 		}
 		req.session.loggedIn = true;
 		req.session.user = newUser;
-	
-		res.statusCode = 200;
-		let data = pug.renderFile("exampleProfile.pug");
-		res.send(data);
+
+		db.collection("users").insertOne(newUser,function(err,result){
+			if(err){
+				res.statusCode=200;
+				res.end("Could not insert");
+			}
+			else{
+				console.log("Inserted");
+				res.statusCode = 200;
+				let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
+				res.send(data)
+			}
+		});
+
 	} else {
 		res.statusCode = 200;
 		let data = pug.renderFile("creation.pug");
 		res.send(data);
-		console.log("ERROR: Username already exists");
+		if(users>0){
+			console.log("ERROR: Username already exists");
+		}
+		if(req.body.password.length === 0 ){
+			console.log("ERROR: Invalid Password");
+		}
+		if(req.body.username.length === 0 ){
+			console.log("ERROR: Invalid Username");
+		}
 	}
 	
 });
@@ -146,13 +174,30 @@ app.post("/login",async(req,res,next)=>{
 	let username = req.body.username;
 	let password = req.body.password;
 	//Check database, if matches update sessions user/pass
-	//Allert if fail
-	req.session.loggedIn = true;
-	req.session.user = "RETURNED USER"
-
-	res.statusCode = 200;
-	let data = pug.renderFile("index.pug", {movies: movies});
-	res.send(data);
+	let users = await db.collection("users").find({name:username}).toArray();
+	
+	if (users.length === 0 ){
+		console.log("ERROR: Username not found");
+	}
+	
+	users.forEach(user => {
+		if(user.name === username){
+			if(user.password === password){
+				
+				req.session.loggedIn = true;
+				req.session.user = user;
+				res.statusCode = 200;
+				console.log("USER LOGGED IN");
+				let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
+				res.send(data);
+			}
+			else{
+				console.log("ERROR: Entered wrong password");
+			}
+		}
+	});
+	
+	
 });
 
 app.post("/addActor",async(req,res,next)=>{
@@ -214,11 +259,14 @@ app.get("/logout",async(req,res,next)=>{
 		res.statusCode = 200;
 		let data = pug.renderFile("creation.pug");
 		res.send(data);
+	}else{
+		req.session.loggedIn = false;
+		req.session.user=null;
+		res.statusCode = 200;
+		let data = pug.renderFile("creation.pug");
+		res.send(data);
 	}
-	req.session.loggedIn = false;
-	req.session.user=null;
-	res.statusCode = 200;
-	res.end("Logged out!");
+	
 });
 // Initialize database connection
 MongoClient.connect("mongodb://localhost:27017/", function(err, client) {

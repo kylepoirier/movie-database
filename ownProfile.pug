@@ -5,11 +5,11 @@ html
     head
         title Your Profile
         style
-            include .\styles\exampleProfile.css
+            include .\styles\ownProfile.css
 body
     include .\header
     div#main
-        h1 Username: Kyle_PS
+        h1 Username: #{user.name}
     div#userType
         input(type='radio', name='regular', value='1')#wnr1
         label(for='regular')
@@ -27,37 +27,30 @@ body
 
     div#followingPeople
         h2 People you follow: 
-        button(name = 'person1',onclick='unfollow(personID)') Unfollow
-        a(href='/person')  Tom Cruise
-        br
-        button(name = 'person2',onclick='unfollow(personID)') Unfollow
-        a(href='/person')  Bernie Sanders
-        br
-        button(name = 'person3',onclick='unfollow(personID)') Unfollow
-        a(href='/person')  Chadwick Boseman
+        each person in user.followingActors 
+            br
+            button(name = 'person1',onclick='unfollow(person)') Unfollow
+            a(href='/person/'+person)  #{person.name}
+            br
 
     div#followingUser
         h2 Users you follow: 
-        button(name = 'user1',onclick='unfollow(userID)') Unfollow
-        a(href='/profile')  Kaushik_P
-        br
-        button(name = 'user2',onclick='unfollow(userID)') Unfollow
-        a(href='/profile')  DAVE_MCK
-        br
-        button(name = 'user3',onclick='unfollow(userID)') Unfollow
-        a(href='/profile')  Elon_MusKrat
+    
+        each user in user.following
+            br
+            button(name = 'user',onclick='unfollow(user)') Unfollow
+            a(href='/profile/'+user) #{user}
+            br
 
     div#WatchList
         h3 Watch List: 
-        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
-        a(href='/movie/0')  The Ballad of Cable Hogue
-        br
-        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
-        a(href='/movie/1')  An American Tail: Fievel Goes West
-        br
-        button(name = 'movie1',onclick='removeWatchList(movieID)') Remove
-        a(href='/movie/8')  The Incredible Mr. Limpet
-        br
+        each movie in user.watchlist
+            br 
+            button(name = 'movie',onclick='removeWatchList(movie)') Remove
+            a(href='/movie/'+movie) #{movie}
+            br
+        
+       
 
     div#Recommends 
         h4 Recommended Movies: 
