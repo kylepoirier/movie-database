@@ -20,31 +20,106 @@ MongoClient.connect("mongodb://localhost:27017/", function (err, client) {
 	db = client.db('database');
 	db.dropCollection("movies", function (err, result) {
 		if (err) {
-			console.log("Error dropping collection. Likely case: collection did not exist (don't worry unless you get other errors...)")
+			console.log("Error dropping collection. Likely case: collection did not exist (don't worry unless you get other errors...)");
 		} else {
 			console.log("Cleared movie collection.");
 		}
 		db.collection("movies").insertMany(movies, function (err, result) {
 			if (err) throw err;
-			console.log("Successfuly inserted " + result.insertedCount + " movies.")
+			console.log("Successfuly inserted " + result.insertedCount + " movies.");
+			initPersonsCollection();
 		})
 	});
-    db.dropCollection("users", function (err, result) {
+    
+	db.dropCollection("users", function (err, result) {
 		if (err) {
-			console.log("Error dropping collection. Likely case: collection did not exist (don't worry unless you get other errors...)")
+			console.log("Error dropping collection. Likely case: collection did not exist (don't worry unless you get other errors...)");
 		} else {
 			console.log("Cleared user collection.");
 		}
         db.collection("users").insertMany(users, function (err, result) {
 			if (err) throw err;
-			console.log("Successfuly inserted " + result.insertedCount + " users.")
+			console.log("Successfuly inserted " + result.insertedCount + " users.");
             
 		})
 	});
-    db.dropCollection("reviews");
+    //Create reviews collection
+	db.dropCollection("reviews");
     db.createCollection("reviews");
-
-    db.dropCollection("persons");
+	//Create persons collection
+	//Loop through movies array; for every person in the movie, if they are not in the database add them and the movie ID to their role
+	//if they are in the database add the movie id to their array for that role
+	db.dropCollection("persons");
     db.createCollection("persons");
+	
+    
     
 });
+
+async function director() {
+	let director = await db.collection("movies").distinct("Director");
+	
+	//console.log(director);
+	
+	for (let i=0; i<director.length; i++) {
+		let check = await db.collection("persons").find({name: director[i]}).count();
+		if (check === 0) {
+			let person = {name: director[i], freqCol: [], writer: [], director: [], actor: []};
+			//console.log("Not in database");
+			db.collection("persons").insertOne(person)
+		} else {
+			console.log("In database:"+director[i]);
+		}
+	}
+}
+async function writer() {
+	let writer = await db.collection("movies").distinct("Writer");
+	
+	//console.log(writer);
+	
+	for (let i=0; i<writer.length; i++) {
+		let check = await db.collection("persons").find({name: writer[i]}).count();
+		if (check === 0) {
+			let person = {name: writer[i], freqCol: [], writer: [], director: [], actor: []};
+			//console.log("Not in database");
+			db.collection("persons").insertOne(person)
+		} else {
+			console.log("In database:"+writer[i]);
+		}
+	}
+}
+async function actor() {
+	let actor = await db.collection("movies").distinct("Actors");
+	
+	//console.log(writer);
+	
+	for (let i=0; i<actor.length; i++) {
+		let check = await db.collection("persons").find({name: actor[i]}).count();
+		if (check === 0) {
+			let person = {name: actor[i], freqCol: [], writer: [], director: [], actor: []};
+			//console.log("Not in database");
+			db.collection("persons").insertOne(person)
+		} else {
+			console.log("In database: "+actor[i]);
+		}
+	}
+}
+async function initPersonsCollection() {
+	director();
+	writer();
+	actor();
+	initCredits();
+}
+
+async function initCredits() {
+	let movies = await db.collection("movies").find().toArray();
+	let persons = await db.collection("persons").find().toArray();
+	movies.forEach(movie => {
+		movie.Actors.forEach(actor => {
+			await db.collection("persons").find({name: actor}, async function(err, result) {
+				await console.log(result.toArray());
+			});
+		});
+	});
+}
+
