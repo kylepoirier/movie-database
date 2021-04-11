@@ -30,16 +30,16 @@ body
         each person in user.followingActors 
             br
             button(name = 'person1',onclick='unfollow(person)') Unfollow
-            a(href='/person/'+person)  #{person.name}
+            a(href='/person/'+person)  #{person}
             br
 
     div#followingUser
         h2 Users you follow: 
     
-        each user in user.following
+        each userID in user.following
             br
-            button(name = 'user',onclick='unfollow(user)') Unfollow
-            a(href='/profile/'+user) #{user}
+            button(name = 'userID',onclick='unfollow(userID)') Unfollow
+            a(href='/profile/'+userID) #{userID}
             br
 
     div#WatchList
@@ -49,15 +49,13 @@ body
             button(name = 'movie',onclick='removeWatchList(movie)') Remove
             a(href='/movie/'+movie) #{movie}
             br
-        
-       
-
     div#Recommends 
         h4 Recommended Movies: 
-        a(href='/movie/1')  SomeRandonMovie
-        br
-        a(href='/movie/5')  SomeRandomMovie2
-        br
+        each movie in user.watchlist
+            br 
+            button(name = 'movie',onclick='removeWatchList(movie)') Remove
+            a(href='/movie/'+movie) #{movie}
+            br
         
     div#notifications 
         h5 Notification Center: 

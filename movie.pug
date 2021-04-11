@@ -13,7 +13,9 @@ body
         div#img
             img(src = movie.Poster)
             br
-            button(name ='add_watchlist',onclick='add_watchlist(movie.Title)') Add to Watchlist
+            <form action="/addWatchlist" method="GET">
+                <input type="submit" value="Add to watchlist">
+            </form>
         div#info
             h3 Movie Info: 
             b Plot: #{movie.Plot}

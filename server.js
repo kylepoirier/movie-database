@@ -9,6 +9,7 @@ const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
+	watchList: [],
 	loggedIn: false,
 	user: null,
     resave: true,
@@ -31,32 +32,55 @@ async function returnMovie(id){
 	return results;
 }
 
+
 //Initialize server
 app.get("/", async(req,res,next)=>{
 	let displayMovies = await db.collection("movies").find().toArray();
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	if(req.session.loggedIn){
-		console.log(req.session.user);
+		//console.log(req.session.user);
 	}
-	
 	res.send(data);
 });
 
 app.get("/movie/:movieID", async(req,res,next)=>{
 	if(req.session.viewedMovies){
 		req.session.viewedMovies.push(req.params.movieID);
+
 	}
 	else{
 		req.session.viewedMovies = [req.params.movieID];
 	}
-	
+
 	returnedMovie = await returnMovie(req.params.movieID);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
 	res.status=200;
 	res.send(data);
 });
+app.get("/addWatchlist", async (req,res,next)=>{
+	console.log(req.session.viewedMovies);
+	if(!req.session.loggedIn){
+		let data = pug.renderFile("creation.pug");
+		res.statusCode = 200;
+		res.end(data);
+	}
+	else{
+		let lastElement = req.session.viewedMovies[req.session.viewedMovies.length -1];
+		console.log(lastElement);
+		if(req.session.watchList){
+			console.log("Pushed");
+			req.session.watchList.push(lastElement);
 
+		}
+		else{
+			console.log("Init");
+			req.session.watchList = [lastElement];
+		}
+		console.log(req.session.watchList);
+		res.status=200;
+	}
+});
 app.get("/ownProfile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
 	if(req.session.loggedIn){
@@ -94,7 +118,6 @@ app.get("/search", async(req,res,next)=>{
 	let data = pug.renderFile("search.pug");
 	res.statusCode = 200;
 	res.end(data);
-	
 });
 
 app.get("/creation", async(req,res,next)=>{
@@ -110,11 +133,23 @@ app.get("/contribute", async(req,res,next)=>{
 	
 });
 
-app.post("/searchresults?",async (req,res,next)=>{
-	let searchResults = movies;
-	let data = pug.renderFile("resultsExample.pug",{movies:searchResults});
-	res.statusCode = 200;
-	res.end(data);
+app.post("/searchresults",async (req,res,next)=>{
+	console.log(req.body.Title);
+	console.log(req.body.Genre);
+	console.log(req.body.Name);
+	
+	let query = {};
+	if(req.body.Title){
+		query.Title = req.body.Title;
+	}
+	if(req.body.Genre){
+		query.Genre = req.body.Genre;
+	}
+	if(req.body.Name){
+		//Refer to persons database
+	}
+	let results = await db.collection("movies").find(query).toArray();
+	console.log(results);
 });
 
 app.post("/createAccount",async(req,res,next)=>{
