@@ -36,7 +36,7 @@ async function returnMovie(id){
 //Initialize server
 app.get("/", async(req,res,next)=>{
 	let displayMovies = await db.collection("movies").find().toArray();
-
+	console.log(req.session.user);
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	res.send(data);
@@ -181,7 +181,7 @@ app.post("/createAccount",async(req,res,next)=>{
 	//Search first, if username does not exist in username database then add.
 	console.log(req.body.username);
 
-	//let users = await db.collection("users").find({name:user}).count();
+	let users = await db.collection("users").find({name:user}).count();
 	console.log(users);
 	//If username does exist, alert to retry
 	if (users === 0 && req.body.password.length!=0 && req.body.username !=0) {
@@ -279,6 +279,8 @@ app.post("/addActor",async(req,res,next)=>{
 });
 
 app.post("/addMovie",async(req,res,next)=>{
+	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
+	let lastID = last[0].ID;
 
 	let newMovie = {
 		Title:req.body.title,
@@ -293,12 +295,11 @@ app.post("/addMovie",async(req,res,next)=>{
 		Plot: "Empty",
 		Awards: "Empty",
 		Poster: "Empty",
-		ID:nextID++,
+		ID:lastID,
 		reviews: "Empty"
 	}
-
+	
 	//Add new movie to database
-	console.log(newMovie);
 	res.statusCode = 200;
 	res.end("Movie addition Requested!");
 });
