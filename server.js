@@ -24,9 +24,9 @@ let db;
 
 //Set up the required data
 const e = require('express');
+
 let returnedMovie = {};
-
-
+let returnedPerson = {};
 async function returnMovie(id){
 	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
 	return results;
@@ -38,9 +38,6 @@ app.get("/", async(req,res,next)=>{
 	let displayMovies = await db.collection("movies").find().toArray();
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
-	if(req.session.loggedIn){
-		//console.log(req.session.user);
-	}
 	res.send(data);
 });
 
@@ -102,12 +99,20 @@ app.get("/profile/:profileID",async(req,res,next)=>{
 	res.end(data);
 });
 
-app.get("/person/:personID", async(req,res,next)=>{
-	let data = pug.renderFile("examplePerson.pug");
+app.get("/person/:person", async(req,res,next)=>{
+	console.log(req.params.person);
+	returnedPerson = await returnPerson(req.params.person);
+	console.log(returnedPerson);
+	console.log("Freq Col");
+	
+	let data = pug.renderFile("person.pug",{person:returnedPerson[0]});
 	res.statusCode = 200;
 	res.end(data);
 });
-
+async function returnPerson(personName){
+	let results =  await db.collection("persons").find({name: personName}).toArray();
+	return results;
+}
 app.get("/review/:reviewID", async(req,res,next)=>{
 	let data = pug.renderFile("exampleReview.pug");
 	res.statusCode = 200;
@@ -147,9 +152,14 @@ app.post("/searchresults",async (req,res,next)=>{
 	}
 	if(req.body.Name){
 		//Refer to persons database
+		let personQuery={};
+		personQuery.name = req.body.Name;
+		let personResults = await db.collection("persons").find(personQuery).toArray();
+		console.log(personResults);
 	}
 	let results = await db.collection("movies").find(query).toArray();
-	console.log(results);
+	
+	
 });
 
 app.post("/createAccount",async(req,res,next)=>{
@@ -158,7 +168,7 @@ app.post("/createAccount",async(req,res,next)=>{
 	//Search first, if username does not exist in username database then add.
 	console.log(req.body.username);
 
-	let users = await db.collection("users").find({name:user}).count();
+	//let users = await db.collection("users").find({name:user}).count();
 	console.log(users);
 	//If username does exist, alert to retry
 	if (users === 0 && req.body.password.length!=0 && req.body.username !=0) {
@@ -174,7 +184,7 @@ app.post("/createAccount",async(req,res,next)=>{
 		}
 		req.session.loggedIn = true;
 		req.session.user = newUser;
-
+		
 		db.collection("users").insertOne(newUser,function(err,result){
 			if(err){
 				res.statusCode=200;
@@ -201,6 +211,7 @@ app.post("/createAccount",async(req,res,next)=>{
 		if(req.body.username.length === 0 ){
 			console.log("ERROR: Invalid Username");
 		}
+		
 	}
 	
 });
@@ -209,6 +220,7 @@ app.post("/login",async(req,res,next)=>{
 	let username = req.body.username;
 	let password = req.body.password;
 	//Check database, if matches update sessions user/pass
+	
 	let users = await db.collection("users").find({name:username}).toArray();
 	
 	if (users.length === 0 ){
@@ -303,14 +315,16 @@ app.get("/logout",async(req,res,next)=>{
 	}
 	
 });
+
 // Initialize database connection
 MongoClient.connect("mongodb://localhost:27017/", function(err, client) {
   if(err) throw err;
 
-  //Get the t8 database
+  //Get the database
   db = client.db('database');
 
   // Start server once Mongo is initialized
   app.listen(3000);
-  console.log("Listening on port 3000");
+	console.log("Listening on port 3000");
 });
+

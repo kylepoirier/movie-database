@@ -1,0 +1,36 @@
+doctype html
+
+html
+    head
+        title #{person.name}
+        style
+            include .\styles\person.css
+body
+    include .\header
+    div#main
+        h1 Name: #{person.name}
+
+    div#Collaborator
+        h2 Frequent Collaborator
+        each col in person.freqCol 
+            a(href='/profile'+col) #{col}
+            br
+
+    div#history
+        h2 Work History: 
+
+        h3 Writer:
+        each movie in person.writer
+            a(href='/movie/'+movie.ID)  #{movie.Title}
+        br
+
+        h4 Director: 
+        each movie in person.director 
+            a(href='/movie/'+movie.ID) #{movie.Title}
+        br
+        
+        h5 Actor:
+        each movie in person.actor 
+            a(href='/movie/'+movie.ID) #{movie.Title}
+        br
+        

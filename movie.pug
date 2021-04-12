@@ -40,19 +40,19 @@ body
                 b Director:
                 each director in movie.Director 
                     br
-                    a(href="/person") #{director}
+                    a(href="/person/"+director) #{director}
                 br
                 br
                 b Writer:
                 each writer in movie.Writer
                     br
-                    a(href="/person") #{writer}
+                    a(href="/person/"+writer) #{writer}
                 br
                 br
                 b Actors:
                 each actor in movie.Actors 
                     br
-                    a(href="/person") #{actor}
+                    a(href="/person/"+actor) #{actor}
                 br
             div#awards
                 h3 Awards: 
