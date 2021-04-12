@@ -36,6 +36,7 @@ async function returnMovie(id){
 //Initialize server
 app.get("/", async(req,res,next)=>{
 	let displayMovies = await db.collection("movies").find().toArray();
+
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	res.send(data);
@@ -100,11 +101,7 @@ app.get("/profile/:profileID",async(req,res,next)=>{
 });
 
 app.get("/person/:person", async(req,res,next)=>{
-	console.log(req.params.person);
 	returnedPerson = await returnPerson(req.params.person);
-	console.log(returnedPerson);
-	console.log("Freq Col");
-	
 	let data = pug.renderFile("person.pug",{person:returnedPerson[0]});
 	res.statusCode = 200;
 	res.end(data);
@@ -138,28 +135,44 @@ app.get("/contribute", async(req,res,next)=>{
 	
 });
 
+app.get("/searchresults/:Genre",async(req,res,next)=>{
+	let query = {};
+	query.Genre = req.params.Genre;
+	let results = await db.collection("movies").find(query).toArray();
+	let personResults = [];
+	let data = pug.renderFile("searchResults.pug",{movies:results,persons:personResults}); 
+	res.statusCode = 200;
+	res.send(data);
+});
 app.post("/searchresults",async (req,res,next)=>{
 	console.log(req.body.Title);
 	console.log(req.body.Genre);
 	console.log(req.body.Name);
-	
+	let personResults = [];
+	let results = [];
 	let query = {};
+	let movieQuery=false;
 	if(req.body.Title){
-		query.Title = req.body.Title;
+		query.Title = {"$regex" : ".*" + req.body.Title + ".*", "$options": "i"};
+		movieQuery=true;
 	}
 	if(req.body.Genre){
-		query.Genre = req.body.Genre;
+		query.Genre = {"$regex" : ".*" + req.body.Genre + ".*", "$options": "i"}
+		movieQuery=true;
 	}
 	if(req.body.Name){
 		//Refer to persons database
 		let personQuery={};
-		personQuery.name = req.body.Name;
-		let personResults = await db.collection("persons").find(personQuery).toArray();
-		console.log(personResults);
+		personQuery.name = {"$regex" : ".*" + req.body.Name + ".*", "$options": "i"}
+		personResults = await db.collection("persons").find(personQuery).toArray();
+		
 	}
-	let results = await db.collection("movies").find(query).toArray();
-	
-	
+	if(movieQuery){
+		results = await db.collection("movies").find(query).toArray();
+	}
+	let data = pug.renderFile("searchResults.pug",{movies:results,persons:personResults}); 
+	res.statusCode = 200;
+	res.send(data);
 });
 
 app.post("/createAccount",async(req,res,next)=>{
