@@ -4,6 +4,7 @@
   "description": "Kyle Poirier Szekely - 101104274\r Kaushik Paul - 101158930",
   "main": "server.js",
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "mongodb": "^3.6.6",

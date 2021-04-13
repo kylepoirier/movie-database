@@ -1,0 +1,13 @@
+const mongoose = require("mongoose");
+const Schema = mongoose.Schema;
+
+let personsSchema = Schema({
+	name: { type: String },
+	freqCollaborator: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
+    director: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
+    writer: [{ type: Schema.Types.ObjectId, ref: 'Movie' }],
+    actor: [{ type: Schema.Types.ObjectId, ref: 'Movie' }]
+	
+});
+
+module.exports = mongoose.model("Persons", personsSchema);

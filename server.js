@@ -2,6 +2,8 @@ const http = require('http');
 const pug = require('pug');
 const express = require('express');
 let app = express();
+const mongoose = require("mongoose");
+
 app.set("view engine", "pug");
 app.use(express.json());
 app.use(express.urlencoded());
@@ -18,9 +20,9 @@ app.use(session({
 }));
 
 //Database variables
-let mongo = require('mongodb');
-let MongoClient = mongo.MongoClient;
-let db;
+//let mongo = require('mongodb');
+//let MongoClient = mongo.MongoClient;
+//let db;
 
 //Set up the required data
 const e = require('express');
@@ -28,14 +30,16 @@ let returnedMovie = {};
 
 
 async function returnMovie(id){
-	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
+	let results =  await mongoose.connection.db.collection("movies").find({ID: Number(id)}).toArray();
 	return results;
 }
 
 
 //Initialize server
 app.get("/", async(req,res,next)=>{
-	let displayMovies = await db.collection("movies").find().toArray();
+	let displayMovies = await mongoose.connection.db.collection("movies").find().toArray();
+	//console.log(displayMovies);
+
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	if(req.session.loggedIn){
@@ -303,14 +307,24 @@ app.get("/logout",async(req,res,next)=>{
 	}
 	
 });
+mongoose.connect('mongodb://localhost/database', {useNewUrlParser: true});
+let db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	mongoose.connection.client.db("database");
+	app.listen(3000);
+	console.log("Server listening on port 3000");
+});
+
 // Initialize database connection
-MongoClient.connect("mongodb://localhost:27017/", function(err, client) {
+/*MongoClient.connect("mongodb://localhost:27017/", function(err, client) {
   if(err) throw err;
 
-  //Get the t8 database
+  //Get the database
   db = client.db('database');
 
   // Start server once Mongo is initialized
   app.listen(3000);
   console.log("Listening on port 3000");
-});
+});*/

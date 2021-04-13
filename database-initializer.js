@@ -108,18 +108,5 @@ async function initPersonsCollection() {
 	director();
 	writer();
 	actor();
-	initCredits();
-}
-
-async function initCredits() {
-	let movies = await db.collection("movies").find().toArray();
-	let persons = await db.collection("persons").find().toArray();
-	movies.forEach(movie => {
-		movie.Actors.forEach(actor => {
-			await db.collection("persons").find({name: actor}, async function(err, result) {
-				await console.log(result.toArray());
-			});
-		});
-	});
 }
 
