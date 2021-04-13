@@ -263,25 +263,50 @@ app.post("/login",async(req,res,next)=>{
 app.post("/addActor",async(req,res,next)=>{
 	let actName = req.body.actorName;
 	//Check if actor exists in database, if so, cannot add, if not... add actor to database
-	let newAct = {
-		name:actName,
-		freqCol: [],
-		writer: [],
-		director: [],
-		actor: []
+	if(!req.session.loggedIn){
+		let data = pug.renderFile("creation.pug");
+		res.statusCode = 200;
+		res.end(data);
+	}else{
+		let last = await db.collection("persons").find({}).sort({_id:-1}).limit(1).toArray();
+		let lastID = last[0].ID;
+	
+		let count = await db.collection("persons").find({name:actName}).count();
+		console.log(count);
+		if(!count){
+			console.log("Person does not exist, adding");
+			let newAct = {
+				name:actName,
+				freqCol: [],
+				writer: [],
+				director: [],
+				actor: [],
+				ID:lastID
+			}
+			console.log(newAct);
+			db.collection("persons").insertOne(newAct);
+		}
+		else{
+			console.log("Actor already exists");
+		}
+		//add newAct to database
+		//Refresh page to the actors profile
+		res.statusCode = 200;
+		res.end("Actor addition Requested!");
 	}
-
-	//add newAct to database
-	console.log(newAct);
-	//Refresh page to the actors profile
-	res.statusCode = 200;
-	res.end("Actor addition Requested!");
+	
 });
 
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
 	let lastID = last[0].ID;
 
+	let directors = req.body.directors.split(",");
+	let writers = req.body.writers.split(",");
+	let actors = req.body.actors.split(",");
+	console.log(directors);
+	console.log(writers);
+	console.log(actors);
 	let newMovie = {
 		Title:req.body.title,
 		Year:req.body.releaseYear,
@@ -296,7 +321,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		Awards: "Empty",
 		Poster: "Empty",
 		ID:lastID,
-		reviews: "Empty"
+		reviews: []
 	}
 	
 	//Add new movie to database
