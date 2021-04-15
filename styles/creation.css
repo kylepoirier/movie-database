@@ -1,9 +1,14 @@
 h1{
     color:#bf616a;
+    text-align: center;
+}
+h2{
+    color:#88c0d0;
+    text-align: center;
 }
 body {
     background-color: #2e3440;
-    color:#EBCB8B;
+    color:#ebcb8b;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
     text-align: center;
@@ -18,14 +23,14 @@ a:link {
 }
 
 a:visited {
-    color: #b48ead;
+    color: #88c0d0;
 }
 
 #info {
     margin: auto;
-    width: 20%;
-    border: 3px solid #3b4252;
+    width: 30%;
+    border: 3px solid #434c5e;
     padding: 10px;
-    background-color: #434c5e;
-    text-align: left;
+    background-color: #3b4252;
+    text-align: center;
 }

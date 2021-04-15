@@ -22,8 +22,13 @@ a:link {
 }
 
 a:visited {
+    color: #88c0d0;
+}
+
+#lmao {
     color: #b48ead;
 }
+
 #info {
     margin: auto;
     width: 20%;
