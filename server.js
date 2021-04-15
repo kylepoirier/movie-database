@@ -13,8 +13,8 @@ app.use(session({
 	loggedIn: false,
 	user: null,
     resave: true,
-    saveUninitialized: true
-
+    saveUninitialized: true,
+	page: 0
 }));
 
 //Database variables
@@ -24,7 +24,6 @@ let db;
 
 //Set up the required data
 const e = require('express');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 let returnedMovie = {};
 let returnedPerson = {};
@@ -36,8 +35,22 @@ async function returnMovie(id){
 
 //Initialize server
 app.get("/", async(req,res,next)=>{
-	let displayMovies = await db.collection("movies").find().toArray();
-	let page = 0;
+	res.redirect("/movies/page/"+0);
+});
+
+app.get("/movies/page/:page", async(req,res,next)=>{
+	if (req.params.page === "0") {
+		req.session.page = 0;
+	} else if (req.params.page === "next") {
+		req.session.page += 1;
+	} else if (req.params.page === "prev") {
+		if (req.session.page === 0) {
+			req.session.page = 0;
+		} else {
+			req.session.page -= 1;
+		}
+	}
+	let displayMovies = await db.collection("movies").find().limit(10).skip(Number(req.session.page)*10).toArray();
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	res.send(data);
@@ -58,7 +71,6 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 	res.send(data);
 });
 app.get("/addWatchlist", async (req,res,next)=>{
-	console.log(req.session.viewedMovies);
 	if(!req.session.loggedIn){
 		let data = pug.renderFile("creation.pug");
 		res.statusCode = 200;

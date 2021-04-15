@@ -1,7 +1,7 @@
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let db;
-let movieData = require("./movie-data-10.json");
+let movieData = require("./movie-data-100.json");
 let movies = [];
 let nextMovieID=0;
 
