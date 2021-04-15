@@ -9,6 +9,7 @@ const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
+	viewedUsers: [],
 	loggedIn: false,
 	user: null,
     resave: true,
