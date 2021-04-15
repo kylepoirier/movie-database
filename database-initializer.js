@@ -7,6 +7,7 @@ let nextMovieID=0;
 
 movieData.forEach(movie => {
 	movie.ID = nextMovieID;
+	movie.Reviews = [];
 	movies[nextMovieID++] = movie;
 });
 let users = [{
@@ -145,9 +146,18 @@ MongoClient.connect("mongodb://localhost:27017/", function (err, client) {
 			console.log("Successfuly inserted " + result.insertedCount + " persons.");
 		})
 	});
-    //Create reviews collection
-	db.dropCollection("reviews");
-    db.createCollection("reviews");
+
+	db.dropCollection("reviews", function (err, result) {
+		if (err) {
+			console.log("Error dropping collection. Likely case: collection did not exist (don't worry unless you get other errors...)");
+		} else {
+			console.log("Cleared reviews collection.");
+		}
+        db.createCollection("reviews", function(err,result){
+			console.log("Created reviews collection");
+			process.exit(1);
+		});
+	});
 	//Create persons collection
 	//Loop through movies array; for every person in the movie, if they are not in the database add them and the movie ID to their role
 	//if they are in the database add the movie id to their array for that role

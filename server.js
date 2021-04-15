@@ -9,7 +9,6 @@ const session = require('express-session');
 app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
-	watchList: [],
 	loggedIn: false,
 	user: null,
     resave: true,
@@ -65,25 +64,19 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		res.end(data);
 	}
 	else{
-		let lastElement = req.session.viewedMovies[req.session.viewedMovies.length -1];
-		console.log(lastElement);
-		if(req.session.watchList){
-			console.log("Pushed");
-			req.session.watchList.push(lastElement);
-
-		}
-		else{
-			console.log("Init");
-			req.session.watchList = [lastElement];
-		}
-		console.log(req.session.watchList);
+		let array = req.session.viewedMovies;
+		let arraySize = array.length;
+		let newMovie = await returnMovie(req.session.viewedMovies[arraySize-1]);
+		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"watchlist":newMovie[0]}});
 		res.status=200;
 	}
 });
 app.get("/ownProfile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
 	if(req.session.loggedIn){
-		let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
+		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
+		
+		let data = await pug.renderFile("ownProfile.pug",{user:profile[0]});
 		res.statusCode = 200;
 		res.end(data);
 	}
@@ -95,7 +88,10 @@ app.get("/ownProfile", async(req,res,next)=>{
 	
 });
 
-app.get("/profile/:profileID",async(req,res,next)=>{
+app.get("/profile/:profile",async(req,res,next)=>{
+	console.log(req.params.profile);
+	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
+	console.log(profile);
 	let data = pug.renderFile("exampleOtherProfile.pug");
 	res.statusCode = 200;
 	res.end(data);
@@ -112,7 +108,10 @@ async function returnPerson(personName){
 	return results;
 }
 app.get("/review/:reviewID", async(req,res,next)=>{
-	let data = pug.renderFile("exampleReview.pug");
+	console.log(req.params.reviewID);
+	let result = await db.collection("reviews").find({id:Number(req.params.reviewID)}).toArray();
+	console.log(result[0]);
+	let data = pug.renderFile("review.pug",{review:result[0]});
 	res.statusCode = 200;
 	res.end(data);
 });
@@ -258,8 +257,8 @@ app.post("/login",async(req,res,next)=>{
 				req.session.user = user;
 				res.statusCode = 200;
 				console.log("USER LOGGED IN");
-				let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
-				res.send(data);
+				//let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
+				res.send("Logged in!");
 			}
 			else{
 				console.log("ERROR: Entered wrong password");
@@ -306,7 +305,9 @@ app.post("/addActor",async(req,res,next)=>{
 	}
 	
 });
-
+function removeWatchlist(){
+	console.log("Button pressed");
+}
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
 	let lastID = last[0].ID;
@@ -355,7 +356,7 @@ app.post("/addReview",async(req,res,next)=>{
 			lastID = 0;
 		} else {
 			let last = await db.collection("reviews").find({}).sort({_id:-1}).limit(1).toArray();
-			lastID = last[0]._id;
+			lastID = last[0].id +1;
 		}
 	
 		let array = req.session.viewedMovies;
@@ -370,8 +371,12 @@ app.post("/addReview",async(req,res,next)=>{
 		};
 		console.log(newReview);
 		db.collection("reviews").insertOne(newReview);
+
+		db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
+		console.log(req.session.user.name);
+		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
 		res.statusCode = 200;
-		res.end("Review basic addition Requested!");
+		res.end("Review addition Requested!");
 	}
 });
 

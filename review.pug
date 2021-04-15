@@ -1,0 +1,24 @@
+doctype html
+
+html
+    head
+        title Review
+        style
+            include .\styles\review.css
+body
+    include .\header
+    div#main
+        div#reviewer
+            h1 Reviewer: #{review.reviewer}
+        div#movie
+            a(href="/movie/"+review.movie) See Movie
+    div#review
+        h2 Score: #{review.score}
+        br
+        b Summary Text: 
+        p #{review.sum}
+        br
+        br
+
+        b Full Text: 
+        p #{review.full}
