@@ -7,6 +7,7 @@ let nextMovieID=0;
 
 movieData.forEach(movie => {
 	movie.ID = nextMovieID;
+	movie.Reviews = [];
 	movies[nextMovieID++] = movie;
 });
 let users = [{

@@ -112,6 +112,9 @@ async function returnPerson(personName){
 	return results;
 }
 app.get("/review/:reviewID", async(req,res,next)=>{
+	console.log(req.params.reviewID);
+	let result = await db.collection("reviews").find({id:Number(req.params.reviewID)}).toArray();
+	console.log(result);
 	let data = pug.renderFile("exampleReview.pug");
 	res.statusCode = 200;
 	res.end(data);
@@ -355,7 +358,7 @@ app.post("/addReview",async(req,res,next)=>{
 			lastID = 0;
 		} else {
 			let last = await db.collection("reviews").find({}).sort({_id:-1}).limit(1).toArray();
-			lastID = last[0]._id;
+			lastID = last[0].id +1;
 		}
 	
 		let array = req.session.viewedMovies;
@@ -370,6 +373,8 @@ app.post("/addReview",async(req,res,next)=>{
 		};
 		console.log(newReview);
 		db.collection("reviews").insertOne(newReview);
+
+		db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
 		res.statusCode = 200;
 		res.end("Review basic addition Requested!");
 	}

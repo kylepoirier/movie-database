@@ -59,6 +59,19 @@ body
                 b #{movie.Awards} 
         div#reviews 
             h3 Reviews:
+            each review in movie.Reviews
+                br
+                h Reviewer: 
+                a(href="/profile/"+review.user) #{review.reviewer}
+                br
+                h Score: #{review.score}
+                br 
+                h Summary: #{review.sum}
+                br
+                a(href="/review/"+review.id) Full Review
+                br
+                br
+
             
 
             <form action="/addReview" method="POST">
