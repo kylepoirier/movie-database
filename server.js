@@ -81,6 +81,7 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		let arraySize = array.length;
 		let newMovie = await returnMovie(req.session.viewedMovies[arraySize-1]);
 		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"watchlist":newMovie[0]}});
+		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
 		res.status=200;
 	}
 });
