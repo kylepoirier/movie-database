@@ -24,6 +24,7 @@ let db;
 
 //Set up the required data
 const e = require('express');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 let returnedMovie = {};
 let returnedPerson = {};
@@ -33,11 +34,10 @@ async function returnMovie(id){
 	return results;
 }
 
-
 //Initialize server
 app.get("/", async(req,res,next)=>{
 	let displayMovies = await db.collection("movies").find().toArray();
-	console.log(req.session.user);
+	let page = 0;
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	res.send(data);

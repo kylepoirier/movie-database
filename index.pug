@@ -19,3 +19,9 @@ body
                 each movie in movies
                     a(href="/movie/" + movie.ID) #{movie.Title}
                     br
+                br
+                div#page
+                    div#prev
+                        a(href="/") Previous
+                    div#next
+                        a(href="/") Next

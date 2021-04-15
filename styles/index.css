@@ -18,11 +18,11 @@ body {
 }
 
 a:link {
-    color: #88c0d0;
+    color: #8fbcbb;
 }
 
 a:visited {
-    color: #88c0d0;
+    color: #8fbcbb;
 }
 
 #lmao {
@@ -37,3 +37,17 @@ a:visited {
     background-color: #434c5e;
     text-align: left;
 }
+
+#next {
+    text-align: right;
+}
+
+#prev {
+    width: 100%;
+}
+
+#page {
+    padding: 0.5em;
+    width: 360px;
+    display: flex;
+  }
