@@ -46,17 +46,21 @@ body
         h3 Watch List: 
         each movie in user.watchlist
             br 
-            button(name = 'movie',onclick='removeWatchList(movie)') Remove
-            a(href='/movie/'+movie) #{movie}
+            a(href='/movie/'+movie.ID) #{movie.Title}
             br
     div#Recommends 
         h4 Recommended Movies: 
         each movie in user.watchlist
             br 
-            button(name = 'movie',onclick='removeWatchList(movie)') Remove
-            a(href='/movie/'+movie) #{movie}
+            a(href='/movie/'+movie.ID) #{movie.Title}
             br
-        
+    div#Reviews 
+        h5 Reviews: 
+        each review in user.reviews 
+            a(href="/review/"+review.id) Review
+            h  Score: #{review.score}
+            h  Summary: #{review.sum}
+
     div#notifications 
         h5 Notification Center: 
         button(name = 'movie1',onclick='removeElement(elementID)') Delete
