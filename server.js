@@ -27,6 +27,7 @@ const e = require('express');
 
 let returnedMovie = {};
 let returnedPerson = {};
+let reviewID = 0;
 async function returnMovie(id){
 	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
 	return results;
@@ -123,9 +124,18 @@ app.get("/search", async(req,res,next)=>{
 });
 
 app.get("/creation", async(req,res,next)=>{
-	let data = pug.renderFile("creation.pug");
-	res.statusCode = 200;
-	res.end(data);
+	if (!req.session.loggedIn) {
+		let data = pug.renderFile("creation.pug");
+		res.statusCode = 200;
+		res.end(data);
+	} else {
+		let displayMovies = await db.collection("movies").find().toArray();
+		let data = pug.renderFile("index.pug", {movies: displayMovies});
+		res.statusCode = 200;
+		console.log("ERROR: Cannot log in/sign up, already logged in.")
+		res.end(data);
+	}
+	
 	
 });
 app.get("/contribute", async(req,res,next)=>{
@@ -329,9 +339,40 @@ app.post("/addMovie",async(req,res,next)=>{
 	res.end("Movie addition Requested!");
 });
 
-app.post("/addReview/basic?",async(req,res,next)=>{
-	res.statusCode = 200;
-	res.end("Review basic addition Requested!");
+app.post("/addReview",async(req,res,next)=>{
+	if (!req.session.loggedIn) {
+		console.log("Not Logged In");
+		res.statusCode = 200;
+		let data = pug.renderFile("creation.pug");
+		res.send(data);
+	} else {
+		
+		let lastID;
+
+		let count = await db.collection("reviews").find().count();
+
+		if (count === 0) {
+			lastID = 0;
+		} else {
+			let last = await db.collection("reviews").find({}).sort({_id:-1}).limit(1).toArray();
+			lastID = last[0]._id;
+		}
+	
+		let array = req.session.viewedMovies;
+		let arraySize = array.length;
+		let newReview = {
+			reviewer: req.session.user.name,
+			movie: req.session.viewedMovies[arraySize-1],
+			score: req.body.reviewScore,
+			sum: req.body.sumReview,
+			full: req.body.fullReview,
+			id: lastID
+		};
+		console.log(newReview);
+		db.collection("reviews").insertOne(newReview);
+		res.statusCode = 200;
+		res.end("Review basic addition Requested!");
+	}
 });
 
 app.post("/addReview/full?",async(req,res,next)=>{

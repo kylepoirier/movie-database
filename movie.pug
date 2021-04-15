@@ -59,29 +59,21 @@ body
                 b #{movie.Awards} 
         div#reviews 
             h3 Reviews:
-            p 10/10 Smelled great! 
-                a(href="/review") View Details
-            
-            label(for='reviewScore')
-            span.
-                Review Score: 
-            input(type="text" name="reviewScore" placeholder=" " size="1")
-            button(name ='basicReview',onclick='basicReview(input)') Submit Basic Review
-            br
-            br
-            label(for='sumReview')
-            span.
-                Review Summary: 
-            input(type="text" name="sumReview" placeholder="")
-            br
-            br
-            label(for='fullReview')
-            span.
-                Full Review Text: 
-            input(type="text" name="bFullReview" placeholder="")
-            br
-            br
-            button(name ='bFullReview',onclick='fullReview(input)') Submit Full Review
             
 
+            <form action="/addReview" method="POST">
+                <label for="reviewScore">Review Score: </label>
+                <input id="reviewScore" type="text" name="reviewScore">
+                br
+                br
+                <label for="sumReview">Review Summary: </label>
+                <input id="sumReview" type="text" name="sumReview">
+                br
+                br
+                <label for="fullReview">Full Review Text: </label>
+                <input id="fullReview" type="text" name="fullReview">
+                br
+                br
+                <input type="submit" value="Add Review">
+            </form>
             

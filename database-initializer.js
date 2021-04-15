@@ -143,7 +143,6 @@ MongoClient.connect("mongodb://localhost:27017/", function (err, client) {
         db.collection("persons").insertMany(persons, function (err, result) {
 			if (err) throw err;
 			console.log("Successfuly inserted " + result.insertedCount + " persons.");
-            
 		})
 	});
     //Create reviews collection
@@ -152,5 +151,5 @@ MongoClient.connect("mongodb://localhost:27017/", function (err, client) {
 	//Create persons collection
 	//Loop through movies array; for every person in the movie, if they are not in the database add them and the movie ID to their role
 	//if they are in the database add the movie id to their array for that role
-	  
+	
 });
