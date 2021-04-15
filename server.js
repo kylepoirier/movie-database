@@ -279,7 +279,7 @@ app.post("/addActor",async(req,res,next)=>{
 		res.end(data);
 	}else{
 		let last = await db.collection("persons").find({}).sort({_id:-1}).limit(1).toArray();
-		let lastID = last[0].ID;
+		let lastID = last[0].ID+1;
 	
 		let count = await db.collection("persons").find({name:actName}).count();
 		console.log(count);
