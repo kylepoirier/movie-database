@@ -92,7 +92,7 @@ app.get("/profile/:profile",async(req,res,next)=>{
 	console.log(req.params.profile);
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
 	console.log(profile);
-	let data = pug.renderFile("exampleOtherProfile.pug");
+	let data = pug.renderFile("otherProfile.pug",{user:profile[0]});
 	res.statusCode = 200;
 	res.end(data);
 });
