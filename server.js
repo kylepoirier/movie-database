@@ -43,6 +43,7 @@ app.get("/movies/page/:page", async(req,res,next)=>{
 		req.session.page = 0;
 	} else if (req.params.page === "next") {
 		req.session.page += 1;
+		
 	} else if (req.params.page === "prev") {
 		if (req.session.page === 0) {
 			req.session.page = 0;
@@ -51,6 +52,12 @@ app.get("/movies/page/:page", async(req,res,next)=>{
 		}
 	}
 	let displayMovies = await db.collection("movies").find().limit(10).skip(Number(req.session.page)*10).toArray();
+	//console.log(displayMovies);
+	if (displayMovies.length === 0) {
+		req.session.page -= 1;
+		displayMovies = await db.collection("movies").find().limit(10).skip(Number(req.session.page)*10).toArray();
+	}
+	
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
 	res.status=200;
 	res.send(data);
@@ -85,7 +92,7 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		res.status=200;
 	}
 });
-app.get("/ownProfile", async(req,res,next)=>{
+app.get("/profile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
 	if(req.session.loggedIn){
 		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
