@@ -8,12 +8,6 @@ body {
     font-weight: 300;
     text-align: center;
 }
-a:link {
-    color: #88c0d0;
-}
-a:visited {
-    color: #b48ead;
-}
 #info {
     margin: auto;
     width: 50%;

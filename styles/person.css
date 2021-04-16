@@ -1,18 +1,39 @@
 h1{
     color:#bf616a;
 }
+h3 {
+    color:#88c0d0;
+}
+h4 {
+    color:#b48ead
+}
 body {
     background-color: #2e3440;
     color:#EBCB8B;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
+    text-align: center;
+}
+#info {
+    margin: auto;
+    width: 30%;
+    border: 3px solid #434c5e;
+    padding: 25px;
+    background-color: #3b4252;
     text-align: left;
+    border-radius: 20px;
 }
 
-a:link {
-    color: #88c0d0;
+#buttons {
+    display: block;
+    margin: 0 auto;
+  }
+
+#follow {
+    display: inline-block;
 }
 
-a:visited {
-    color: #b48ead;
+#unfollow {
+    display: inline-block;
 }
+

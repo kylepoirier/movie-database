@@ -10,6 +10,7 @@ app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
 	viewedUsers: [],
+	viewPersons: [],
 	loggedIn: false,
 	user: null,
     resave: true,
@@ -21,7 +22,6 @@ app.use(session({
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let db;
-let update = 0;
 
 //Set up the required data
 const e = require('express');
@@ -143,6 +143,17 @@ app.post("/updateUser",async(req,res,next)=>{
 	}
 });
 
+app.post("/followPerson", async(req, res,next)=> {
+	let person = req.session.viewedPersons[req.session.viewedPersons.length-1];
+	console.log("Followed");
+	//console.log(req.body.unfollow);
+});
+
+app.post("/unfollowPerson", async(req, res,next)=> {
+	let person = req.session.viewedPersons[req.session.viewedPersons.length-1];
+	console.log("Unfollowed");
+});
+
 app.get("/profile/:profile",async(req,res,next)=>{
 	console.log(req.params.profile);
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
@@ -153,6 +164,12 @@ app.get("/profile/:profile",async(req,res,next)=>{
 });
 
 app.get("/person/:person", async(req,res,next)=>{
+	if(req.session.viewedPersons){
+		req.session.viewedPersons.push(req.params.person);
+	}
+	else{
+		req.session.viewedPersons = [req.params.person];
+	}
 	returnedPerson = await returnPerson(req.params.person);
 	let data = pug.renderFile("person.pug",{person:returnedPerson[0]});
 	res.statusCode = 200;
