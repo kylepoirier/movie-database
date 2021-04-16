@@ -73,7 +73,10 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 	}
 
 	returnedMovie = await returnMovie(req.params.movieID);
-	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
+	let simMovies = await db.collection("movies").find({"Genre":returnedMovie[0].Genre}).toArray();
+	console.log(returnedMovie[0].Genre);
+	console.log(simMovies);
+	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies});
 	res.statusCode = 200;
 	res.send(data);
 });
