@@ -229,8 +229,7 @@ app.post("/createAccount",async(req,res,next)=>{
 			else{
 				console.log("Inserted");
 				res.statusCode = 200;
-				let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
-				res.send(data)
+				res.redirect("/profile");
 			}
 		});
 
@@ -272,7 +271,7 @@ app.post("/login",async(req,res,next)=>{
 				res.statusCode = 200;
 				console.log("USER LOGGED IN");
 				//let data = pug.renderFile("ownProfile.pug",{user:req.session.user});
-				res.send("Logged in!");
+				res.redirect("/profile");
 			}
 			else{
 				console.log("ERROR: Entered wrong password");
