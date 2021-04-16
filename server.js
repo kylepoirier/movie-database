@@ -59,7 +59,7 @@ app.get("/movies/page/:page", async(req,res,next)=>{
 	}
 	
 	let data = pug.renderFile("index.pug", {movies: displayMovies});
-	res.status=200;
+	res.statusCode = 200;
 	res.send(data);
 });
 
@@ -74,7 +74,7 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 
 	returnedMovie = await returnMovie(req.params.movieID);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0]});
-	res.status=200;
+	res.statusCode = 200;
 	res.send(data);
 });
 app.get("/addWatchlist", async (req,res,next)=>{
@@ -89,7 +89,7 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		let newMovie = await returnMovie(req.session.viewedMovies[arraySize-1]);
 		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"watchlist":newMovie[0]}});
 		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
-		res.status=200;
+		res.statusCode = 200;
 	}
 });
 app.get("/profile", async(req,res,next)=>{
@@ -395,8 +395,9 @@ app.post("/addReview",async(req,res,next)=>{
 		db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
 		console.log(req.session.user.name);
 		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
+		
+		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
 		res.statusCode = 200;
-		res.end("Review addition Requested!");
 	}
 });
 
