@@ -75,7 +75,9 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 	}
 
 	returnedMovie = await returnMovie(req.params.movieID);
+	
 	let simMovies = await db.collection("movies").find({"Genre":returnedMovie[0].Genre}).toArray();
+	console.log(simMovies);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies});
 	res.statusCode = 200;
 	res.send(data);
@@ -380,10 +382,22 @@ app.post("/addMovie",async(req,res,next)=>{
 	let lastPerson = await db.collection("persons").find({}).sort({_id:-1}).limit(1).toArray();
 	let lastPersonID = lastPerson[0].ID + 1;
 
-	let directors = req.body.directors.split(",");
-	let writers = req.body.writers.split(",");
-	let actors = req.body.actors.split(",");
-	let genre = req.body.genre.split(",");
+	let directors = req.body.directors;
+	directors = directors.split(",").map(function (value) {
+		return value.trim();
+	});
+	let writers = req.body.writers;
+	writers = writers.split(",").map(function (value) {
+		return value.trim();
+	});
+	let actors = req.body.actors;
+	actors = actors.split(",").map(function (value) {
+		return value.trim();
+	});
+	let genre = req.body.genre;
+	genre = genre.split(",").map(function (value) {
+		return value.trim();
+	});
 
 
 	let newMovie = {
@@ -444,7 +458,7 @@ app.post("/addMovie",async(req,res,next)=>{
 			}
 		}
 		else{
-			db.collection("persons").updateOne({"name":directors[i]},{$push:{"writer":newMovie}});
+			db.collection("persons").updateOne({"name":writers[i]},{$push:{"writer":newMovie}});
 			console.log("Person already exists");
 		}
 	}
@@ -466,7 +480,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		}
 		else{
 			console.log("Person already exists");
-			db.collection("persons").updateOne({"name":directors[i]},{$push:{"actor":newMovie}});
+			db.collection("persons").updateOne({"name":actors[i]},{$push:{"actor":newMovie}});
 		}
 	}
 
