@@ -336,7 +336,7 @@ app.post("/addActor",async(req,res,next)=>{
 		let count = await db.collection("persons").find({name:actName}).count();
 		console.log(count);
 		if(!count){
-			console.log("Person does not exist, adding");
+			
 			let newAct = {
 				name:actName,
 				freqCol: [],
@@ -346,10 +346,14 @@ app.post("/addActor",async(req,res,next)=>{
 				ID:lastID
 			}
 			console.log(newAct);
-			db.collection("persons").insertOne(newAct);
+			if(newAct.name != ""){
+				console.log("Person does not exist, adding");
+				db.collection("persons").insertOne(newAct);
+			}
+			
 		}
 		else{
-			console.log("Actor already exists");
+			console.log("Person already exists");
 		}
 		//add newAct to database
 		//Refresh page to the actors profile
@@ -358,36 +362,105 @@ app.post("/addActor",async(req,res,next)=>{
 	}
 	
 });
-function removeWatchlist(){
-	console.log("Button pressed");
-}
+
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
-	let lastID = last[0].ID;
+	let lastID = last[0].ID +1;
+	let lastPerson = await db.collection("persons").find({}).sort({_id:-1}).limit(1).toArray();
+	let lastPersonID = lastPerson[0].ID + 1;
 
 	let directors = req.body.directors.split(",");
 	let writers = req.body.writers.split(",");
 	let actors = req.body.actors.split(",");
-	console.log(directors);
-	console.log(writers);
-	console.log(actors);
+	let genre = req.body.genre.split(",");
+
+
 	let newMovie = {
 		Title:req.body.title,
 		Year:req.body.releaseYear,
 		Rated:0,
 		Released:0,
 		Runtime: req.body.runtime,
-		Genre:"Empty",
-		Director: req.body.directors,
-		Writer: req.body.writers,
-		Actors: req.body.actors,
+		Genre:genre,
+		Director:directors,
+		Writer: writers,
+		Actors: actors,
 		Plot: "Empty",
 		Awards: "Empty",
 		Poster: "Empty",
 		ID:lastID,
-		reviews: []
+		Reviews: []
 	}
-	
+
+
+
+	for(let i=0; i<directors.length;i++){
+		let count = await db.collection("persons").find({name:directors[i]}).count();
+		if(!count){
+			let newPerson = {
+				name:directors[i],
+				freqCol: [],
+				writer: [],
+				director: [newMovie],
+				actor: [],
+				ID:lastPersonID
+			}
+			if(newPerson.name != ""){
+				console.log(directors[i]+ " does not exist, adding");
+				db.collection("persons").insertOne(newPerson);
+			}
+		}
+		else{
+			console.log("Person already exists");
+			db.collection("persons").updateOne({"name":directors[i]},{$push:{"director":newMovie}});
+			
+		}
+	}
+	for(let i=0; i<writers.length;i++){
+		let count = await db.collection("persons").find({name:writers[i]}).count();
+		if(!count){
+			let newPerson = {
+				name:writers[i],
+				freqCol: [],
+				writer: [newMovie],
+				director: [],
+				actor: [],
+				ID:lastPersonID
+			}
+			if(newPerson.name != ""){
+				console.log(writers[i]+ " does not exist, adding");
+				db.collection("persons").insertOne(newPerson);
+			}
+		}
+		else{
+			db.collection("persons").updateOne({"name":directors[i]},{$push:{"writer":newMovie}});
+			console.log("Person already exists");
+		}
+	}
+	for(let i=0; i<actors.length;i++){
+		let count = await db.collection("persons").find({name:actors[i]}).count();
+		if(!count){
+			let newPerson = {
+				name:actors[i],
+				freqCol: [],
+				writer: [],
+				director: [],
+				actor: [newMovie],
+				ID:lastPersonID
+			}
+			if(newPerson.name != ""){
+				console.log(actors[i]+ " does not exist, adding");
+				db.collection("persons").insertOne(newPerson);
+			}
+		}
+		else{
+			console.log("Person already exists");
+			db.collection("persons").updateOne({"name":directors[i]},{$push:{"actor":newMovie}});
+		}
+	}
+
+	db.collection("movies").insertOne(newMovie);
+	console.log(newMovie);
 	//Add new movie to database
 	res.statusCode = 200;
 	res.end("Movie addition Requested!");
@@ -432,11 +505,6 @@ app.post("/addReview",async(req,res,next)=>{
 		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
 		res.statusCode = 200;
 	}
-});
-
-app.post("/addReview/full?",async(req,res,next)=>{
-	res.statusCode = 200;
-	res.end("Review full addition Requested!");
 });
 
 app.get("/logout",async(req,res,next)=>{
