@@ -22,6 +22,10 @@ a:link {
     color: #8fbcbb;
 }
 
+a:visited {
+    color: #8fbcbb;
+}
+
 a {
     text-decoration: none;
 }
@@ -31,13 +35,6 @@ a:hover {
     transition-duration: 500ms;
 }
 
-a:visited {
-    color: #8fbcbb;
-}
-
-#lmao {
-    color: #b48ead;
-}
 
 #info {
     margin: auto;

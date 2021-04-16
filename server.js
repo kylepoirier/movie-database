@@ -112,7 +112,6 @@ app.get("/profile", async(req,res,next)=>{
 				
 			}
 		}
-		console.log(simMovies);
 		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies});
 		res.statusCode = 200;
 		res.end(data);
@@ -120,9 +119,8 @@ app.get("/profile", async(req,res,next)=>{
 		
 	}
 	else{
-		let data = pug.renderFile("creation.pug");
+		res.redirect("/creation");
 		res.statusCode = 200;
-		res.end(data);
 	}
 	
 });
@@ -131,10 +129,10 @@ app.post("/updateUser",async(req,res,next)=>{
 	if (req.session.loggedIn) {
 		if (Number(req.body.userType) === 0) {
 			console.log("Updated profile; regular");
-			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"type": false}});
+			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"contributor": false}});
 		} else if (Number(req.body.userType) === 1) {
 			console.log("Updated profile; contributing");
-			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"type": true}});
+			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"contributor": true}});
 		}
 		res.redirect("/profile");
 		res.statusCode = 200;
@@ -191,11 +189,24 @@ app.get("/creation", async(req,res,next)=>{
 	
 	
 });
+
 app.get("/contribute", async(req,res,next)=>{
-	let data = pug.renderFile("contribute.pug");
-	res.statusCode = 200;
-	res.end(data);
-	
+	if (req.session.loggedIn) {	
+		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
+		if (profile[0].contributor === true) {
+			let data = pug.renderFile("contribute.pug");
+			res.statusCode = 200;
+			res.end(data);
+		} else {
+			console.log("ERROR: Not a contributing user");
+			res.redirect("/profile");
+			res.statusCode = 200;
+		}
+	} else {
+		console.log("ERROR: User not logged in");
+		res.redirect("/creation");
+		res.statusCode = 200;
+	}
 });
 
 app.get("/searchresults/:Genre",async(req,res,next)=>{
@@ -251,7 +262,7 @@ app.post("/createAccount",async(req,res,next)=>{
 		let newUser = {
 			name: user,
 			password: pass,
-			type: false,
+			contributor: false,
 			reviews: [],
 			watchlist: [],
 			followers: [],
@@ -511,8 +522,7 @@ app.get("/logout",async(req,res,next)=>{
 	if(!req.session.loggedIn){
 		console.log("Not Logged In");
 		res.statusCode = 200;
-		let data = pug.renderFile("creation.pug");
-		res.send(data);
+		res.redirect("/creation");
 	}else{
 		req.session.loggedIn = false;
 		req.session.user=null;
