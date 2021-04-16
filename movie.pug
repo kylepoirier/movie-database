@@ -57,6 +57,11 @@ body
             div#awards
                 h3 Awards: 
                 b #{movie.Awards} 
+            div#similar 
+                h4 Similar Movies: 
+                each sim in similar 
+                    br 
+                    a(href="/movie/"+sim.ID) #{sim.Title}
         div#reviews 
             h3 Reviews:
             each review in movie.Reviews
