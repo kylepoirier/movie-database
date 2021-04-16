@@ -11,19 +11,18 @@ body
     div#main
         h1 Username: #{user.name}
     div#userType
-        input(type='radio', name='regular', value='1')#wnr1
-        label(for='regular')
-        span.
-            Regular 
-        br
-        input(type='radio', name='contributing', value='2')#wnr2
-        label(for='contributing')
-        span.
-            Contributing
-        br
-        button(onclick='updateUser()') Save
-        br
-        br
+        div#switch-field
+            <form action="/updateUser" method="POST">
+                <input id="regular" type="radio" name="userType" value="0">
+                <label for="regular">Regular </label>
+                br
+                <input id="contributing" type="radio" name="userType" value="1">
+                <label for="contributing">Contributing </label>
+                br
+                <input type="submit" value="Save">
+                br
+                br
+            </form>
 
     div#followingPeople
         h2 People you follow: 

@@ -16,3 +16,7 @@ a:link {
 a:visited {
     color: #b48ead;
 }
+
+input {
+    display: inline-block;       
+}
