@@ -4,14 +4,15 @@ a:link {
 
 a {
     text-decoration: none;
+    text-align: center;
+}
+
+a:visited {
+    color: #8fbcbb;
 }
 
 a:hover {
     color: #5b9190;
     transition-duration: 500ms;
-}
-
-a:visited {
-    color: #8fbcbb;
 }
 

@@ -112,7 +112,6 @@ app.get("/profile", async(req,res,next)=>{
 				
 			}
 		}
-		console.log(simMovies);
 		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies});
 		res.statusCode = 200;
 		res.end(data);
@@ -120,9 +119,8 @@ app.get("/profile", async(req,res,next)=>{
 		
 	}
 	else{
-		let data = pug.renderFile("creation.pug");
+		res.redirect("/creation");
 		res.statusCode = 200;
-		res.end(data);
 	}
 	
 });
@@ -191,6 +189,7 @@ app.get("/creation", async(req,res,next)=>{
 	
 	
 });
+
 app.get("/contribute", async(req,res,next)=>{
 	if (req.session.loggedIn) {	
 		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
@@ -455,8 +454,7 @@ app.get("/logout",async(req,res,next)=>{
 	if(!req.session.loggedIn){
 		console.log("Not Logged In");
 		res.statusCode = 200;
-		let data = pug.renderFile("creation.pug");
-		res.send(data);
+		res.redirect("/creation");
 	}else{
 		req.session.loggedIn = false;
 		req.session.user=null;
