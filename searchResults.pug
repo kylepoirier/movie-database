@@ -11,14 +11,17 @@ body
     h1 Search Results
     h2 List of Movies That Match Parameters:
 
-    b Movies 
-    br
-    each movie in movies
-        a(href="/movie/" + movie.ID) #{movie.Title}
+    
+    if movies.length >= 1
+        b Movies 
         br
-
-    b Persons
-    br
-    each person in persons 
-        a(href="/person/"+person.name) #{person.name}
+        each movie in movies
+            a(href="/movie/" + movie.ID) #{movie.Title}
+            br
+    
+    if persons.length >= 1
+        b Persons
         br
+        each person in persons 
+            a(href="/person/"+person.name) #{person.name}
+            br
