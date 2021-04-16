@@ -15,10 +15,20 @@ body {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
     text-align: center;
+    line-height: 1.2;
 }
 
 a:link {
     color: #8fbcbb;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #5b9190;
+    transition-duration: 500ms;
 }
 
 a:visited {
