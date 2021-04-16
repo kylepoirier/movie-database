@@ -7,34 +7,34 @@ html
             include .\styles\otherProfile.css
 body
     include .\header
-    div#main
-        h1 Username: #{user.name}
-    div#followingPeople
-        h2 Following: 
-        each person in user.followingActors 
-            br
-            button(name = 'person1',onclick='unfollow(person)') Unfollow
-            a(href='/person/'+person)  #{person}
-            br
+    div#info
+        h2 Username: #{user.name}
+        div#followingPeople
+            h3 Following: 
+            each person in user.followingActors 
+                br
+                button(name ='person1', onclick='unfollow(person)') Unfollow
+                a(href='/person/'+person)  #{person}
+                br
 
-    div#followingUser
-        h2 Users Following: 
-        each userID in user.following
-            br
-            button(name = 'userID',onclick='unfollow(userID)') Unfollow
-            a(href='/profile/'+userID) #{userID}
-            br
+        div#followingUser
+            h3 Users Following: 
+            each userID in user.following
+                br
+                button(name = 'userID',onclick='unfollow(userID)') Unfollow
+                a(href='/profile/'+userID) #{userID}
+                br
 
-    div#WatchList
-        h3 Watch List: 
-        each movie in user.watchlist
-            br 
-            a(href='/movie/'+movie.ID) #{movie.Title}
-            br
+        div#WatchList
+            h3 Watch List: 
+            each movie in user.watchlist
+                br 
+                a(href='/movie/'+movie.ID) #{movie.Title}
+                br
 
-    div#Reviews 
-        h5 Reviews Written: 
-        each review in user.reviews 
-            a(href="/review/"+review.id) Review
-            h  Score: #{review.score}
-            h  Summary: #{review.sum}
+        div#Reviews 
+            h3 Reviews Written: 
+            each review in user.reviews 
+                a(href="/review/"+review.id) Review
+                h  Score: #{review.score}
+                h  Summary: #{review.sum}
