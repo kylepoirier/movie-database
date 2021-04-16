@@ -149,11 +149,8 @@ app.get("/creation", async(req,res,next)=>{
 		res.statusCode = 200;
 		res.end(data);
 	} else {
-		let displayMovies = await db.collection("movies").find().toArray();
-		let data = pug.renderFile("index.pug", {movies: displayMovies});
-		res.statusCode = 200;
+		res.redirect("/");
 		console.log("ERROR: Cannot log in/sign up, already logged in.")
-		res.end(data);
 	}
 	
 	
