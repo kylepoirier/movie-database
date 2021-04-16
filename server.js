@@ -28,6 +28,7 @@ const e = require('express');
 
 let returnedMovie = {};
 let returnedPerson = {};
+
 let reviewID = 0;
 async function returnMovie(id){
 	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
@@ -94,26 +95,29 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		res.statusCode = 200;
 	}
 });
-async function recommended(watchlist){
-	watchlist.forEach(async movie => {
-		//console.log(movie);
-		let listForMovie = await db.collection("movies").find({"Genre":movie.Genre}).toArray();
-		//console.log(listForMovie);
-		console.log(listForMovie);
-		return listForMovie;
-	});
-}
+
 app.get("/profile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
 	if(req.session.loggedIn){
 		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
-		let simMovies = [];
-		simMovies.push( await recommended(profile[0].watchlist));
+		let simMovies=[];
 		
+		for(let i=0; i<profile[0].watchlist.length;i++){
+			let movie = profile[0].watchlist[i];
+			let listForMovie = await db.collection("movies").find({"Genre":movie.Genre}).toArray();
+			for(let j=0; j<listForMovie.length;j++){
+				if(movie.ID != listForMovie[j].ID){
+					simMovies.push(listForMovie[j])
+				}
+				
+			}
+		}
 		console.log(simMovies);
-		let data = await pug.renderFile("ownProfile.pug",{user:profile[0]});
+		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies});
 		res.statusCode = 200;
 		res.end(data);
+
+		
 	}
 	else{
 		let data = pug.renderFile("creation.pug");

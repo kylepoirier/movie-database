@@ -49,7 +49,7 @@ body
             br
     div#Recommends 
         h4 Recommended Movies: 
-        each movie in user.watchlist
+        each movie in similar
             br 
             a(href='/movie/'+movie.ID) #{movie.Title}
             br
