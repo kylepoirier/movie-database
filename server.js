@@ -25,10 +25,10 @@ let update = 0;
 
 //Set up the required data
 const e = require('express');
-const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 let returnedMovie = {};
 let returnedPerson = {};
+
 let reviewID = 0;
 async function returnMovie(id){
 	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
@@ -76,8 +76,6 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 
 	returnedMovie = await returnMovie(req.params.movieID);
 	let simMovies = await db.collection("movies").find({"Genre":returnedMovie[0].Genre}).toArray();
-	console.log(returnedMovie[0].Genre);
-	console.log(simMovies);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies});
 	res.statusCode = 200;
 	res.send(data);
@@ -97,14 +95,29 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		res.statusCode = 200;
 	}
 });
+
 app.get("/profile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
 	if(req.session.loggedIn){
 		let profile = await db.collection("users").find({name : req.session.user.name}).toArray();
+		let simMovies=[];
 		
-		let data = await pug.renderFile("ownProfile.pug",{user:profile[0]});
+		for(let i=0; i<profile[0].watchlist.length;i++){
+			let movie = profile[0].watchlist[i];
+			let listForMovie = await db.collection("movies").find({"Genre":movie.Genre}).toArray();
+			for(let j=0; j<listForMovie.length;j++){
+				if(movie.ID != listForMovie[j].ID){
+					simMovies.push(listForMovie[j])
+				}
+				
+			}
+		}
+		console.log(simMovies);
+		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies});
 		res.statusCode = 200;
 		res.end(data);
+
+		
 	}
 	else{
 		let data = pug.renderFile("creation.pug");
