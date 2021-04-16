@@ -11,7 +11,7 @@ movieData.forEach(movie => {
 	movies[nextMovieID++] = movie;
 });
 let users = [{
-    name: "admin", password: "password", type: true, reviews: [], watchlist: [], followers: [], following: [], followingActors: []
+    name: "admin", password: "password", contributor: true, reviews: [], watchlist: [], followers: [], following: [], followingActors: []
 }];
 let persons = [];
 let nextPersonID=0;

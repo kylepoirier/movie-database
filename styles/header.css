@@ -1,2 +1,17 @@
+a:link {
+    color: #8fbcbb;
+}
 
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #5b9190;
+    transition-duration: 500ms;
+}
+
+a:visited {
+    color: #8fbcbb;
+}
 
