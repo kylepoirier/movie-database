@@ -21,9 +21,11 @@ app.use(session({
 let mongo = require('mongodb');
 let MongoClient = mongo.MongoClient;
 let db;
+let update = 0;
 
 //Set up the required data
 const e = require('express');
+const { SSL_OP_SSLEAY_080_CLIENT_DH_BUG } = require('constants');
 
 let returnedMovie = {};
 let returnedPerson = {};
@@ -107,6 +109,24 @@ app.get("/profile", async(req,res,next)=>{
 		res.end(data);
 	}
 	
+});
+
+app.post("/updateUser",async(req,res,next)=>{
+	if (req.session.loggedIn) {
+		if (Number(req.body.userType) === 0) {
+			console.log("Updated profile; regular");
+			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"type": false}});
+		} else if (Number(req.body.userType) === 1) {
+			console.log("Updated profile; contributing");
+			await db.collection("users").updateOne({"name": req.session.user.name}, {$set: {"type": true}});
+		}
+		res.redirect("/profile");
+		res.statusCode = 200;
+	} else {
+		console.log("ERROR: Not logged in; redirecting to login page");
+		res.redirect("/creation");
+		res.statusCode = 200;
+	}
 });
 
 app.get("/profile/:profile",async(req,res,next)=>{
