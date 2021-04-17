@@ -29,7 +29,6 @@ const e = require('express');
 let returnedMovie = {};
 let returnedPerson = {};
 
-let reviewID = 0;
 async function returnMovie(id){
 	let results =  await db.collection("movies").find({ID: Number(id)}).toArray();
 	return results;
