@@ -10,7 +10,7 @@ app.use(session({
     secret: 'some secret key here',
     viewedMovies: [],
 	viewedUsers: [],
-	viewPersons: [],
+	viewedPersons: [],
 	loggedIn: false,
 	user: null,
     resave: true,
@@ -150,6 +150,7 @@ app.post("/followPerson", async(req, res,next)=> {
 		let check = await db.collection("users").findOne({"name": req.session.user.name, "followingPersons":person});
 		if (check === null) {
 			db.collection("users").updateOne({"name": req.session.user.name}, {$push: {"followingPersons": person}});
+			db.collection("persons").updateOne({"name": person}, {$push: {"followers": req.session.user.name}});
 			res.redirect("/person/"+person);
 		} else {
 			console.log("ERROR: Already following person")
@@ -166,6 +167,7 @@ app.post("/unfollowPerson", async(req, res,next)=> {
 		let check = await db.collection("users").findOne({"name": req.session.user.name, "followingPersons":person});
 		if (!(check===null)) {
 			db.collection("users").updateOne({"name": req.session.user.name}, {$pull: {"followingPersons": person}});
+			db.collection("persons").updateOne({"name": person}, {$pull: {"followers": req.session.user.name}});
 			res.redirect("/person/"+person);
 		} else {
 			console.log("ERROR: Not following person");
@@ -210,6 +212,13 @@ app.post("/unfollowUser", async(req, res,next)=> {
 });
 
 app.get("/profile/:profile",async(req,res,next)=>{
+	if(req.session.viewedPersons){
+		req.session.viewedPersons.push(req.params.profile);
+
+	}
+	else{
+		req.session.viewedPersons = [req.params.profile];
+	}
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
 	let data = pug.renderFile("otherProfile.pug",{user:profile[0]});
 	res.statusCode = 200;
@@ -437,7 +446,31 @@ app.post("/addActor",async(req,res,next)=>{
 	}
 	
 });
-
+async function notify(notifType,notifName){
+	if(notifType==="movie"){
+		let person = await db.collection("persons").findOne({name:notifName});
+		let followers = person.followers;
+		let newNotif={
+			type:notifType,
+			subject:person,
+			infoStr:person.name+" has a role in a new movie",
+		}
+		followers.forEach(follower => {
+			db.collection("users").updateOne({"name": follower},{$push:{notifications:newNotif}});
+		});
+	}
+	if(notifType==="review"){
+		let user = await db.collection("users").findOne({name:notifName});
+		let followers = user.followers;
+		let newNotif={
+			type:notifType,
+			subject:user,
+			infoStr:user.name+" has curated a new review!",
+		}
+		followers.forEach(follower => {
+			db.collection("users").updateOne({"name": follower},{$push:{notifications:newNotif}});
+		});
+}
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
 	let lastID = last[0].ID +1;
@@ -500,7 +533,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			console.log("Person already exists");
 			db.collection("persons").updateOne({"name":directors[i]},{$push:{"director":newMovie}});
-			
+			notify("movie", directors[i]);
 		}
 	}
 	for(let i=0; i<writers.length;i++){
@@ -522,6 +555,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			db.collection("persons").updateOne({"name":writers[i]},{$push:{"writer":newMovie}});
 			console.log("Person already exists");
+			notify("movie", writers[i]);
 		}
 	}
 	for(let i=0; i<actors.length;i++){
@@ -543,6 +577,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			console.log("Person already exists");
 			db.collection("persons").updateOne({"name":actors[i]},{$push:{"actor":newMovie}});
+			notify("movie", actors[i]);
 		}
 	}
 
