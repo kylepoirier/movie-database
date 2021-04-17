@@ -26,9 +26,7 @@ body
 
     div#followingPeople
         h2 People you follow: 
-        each person in user.followingActors 
-            br
-            button(name = 'person1',onclick='unfollow(person)') Unfollow
+        each person in user.followingPersons
             a(href='/person/'+person)  #{person}
             br
 
@@ -61,12 +59,4 @@ body
             h  Summary: #{review.sum}
 
     div#notifications 
-        h5 Notification Center: 
-        button(name = 'movie1',onclick='removeElement(elementID)') Delete
-        button(name = 'movie1',onclick='viewNotif(notifID)') View
-        b  Kaushik_P added a new movie
-
-        br
-        button(name = 'movie1',onclick='removeElement(elementID)') Delete
-        button(name = 'movie1',onclick='viewNotif(notifID)') View
-        b  Elon_Musk added a new review
+        h5 Notification Center:

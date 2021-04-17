@@ -54,7 +54,6 @@ app.get("/movies/page/:page", async(req,res,next)=>{
 		}
 	}
 	let displayMovies = await db.collection("movies").find().limit(10).skip(Number(req.session.page)*10).toArray();
-	//console.log(displayMovies);
 	if (displayMovies.length === 0) {
 		req.session.page -= 1;
 		displayMovies = await db.collection("movies").find().limit(10).skip(Number(req.session.page)*10).toArray();
@@ -77,7 +76,6 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 	returnedMovie = await returnMovie(req.params.movieID);
 	
 	let simMovies = await db.collection("movies").find({"Genre":returnedMovie[0].Genre}).toArray();
-	console.log(simMovies);
 	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies});
 	res.statusCode = 200;
 	res.send(data);
@@ -147,19 +145,38 @@ app.post("/updateUser",async(req,res,next)=>{
 
 app.post("/followPerson", async(req, res,next)=> {
 	let person = req.session.viewedPersons[req.session.viewedPersons.length-1];
-	console.log("Followed");
-	//console.log(req.body.unfollow);
+	if (!req.session.loggedIn) {
+		res.redirect("/creation");
+	} else {
+		let check = await db.collection("users").findOne({"name": req.session.user.name, "followingPersons":person});
+		if (check === null) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$push: {"followingPersons": person}});
+			res.redirect("/person/"+person);
+		} else {
+			console.log("ERROR: Already following person")
+			res.redirect("person/"+person);
+		}
+	}
 });
 
 app.post("/unfollowPerson", async(req, res,next)=> {
 	let person = req.session.viewedPersons[req.session.viewedPersons.length-1];
-	console.log("Unfollowed");
+	if (!req.session.loggedIn) {
+		res.redirect("/creation");
+	} else {
+		let check = await db.collection("users").findOne({"name": req.session.user.name, "followingPersons":person});
+		if (!(check===null)) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$pull: {"followingPersons": person}});
+			res.redirect("/person/"+person);
+		} else {
+			console.log("ERROR: Not following person");
+			res.redirect("person/"+person);
+		}
+	}
 });
 
 app.get("/profile/:profile",async(req,res,next)=>{
-	console.log(req.params.profile);
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
-	console.log(profile);
 	let data = pug.renderFile("otherProfile.pug",{user:profile[0]});
 	res.statusCode = 200;
 	res.end(data);
@@ -182,9 +199,7 @@ async function returnPerson(personName){
 	return results;
 }
 app.get("/review/:reviewID", async(req,res,next)=>{
-	console.log(req.params.reviewID);
 	let result = await db.collection("reviews").find({id:Number(req.params.reviewID)}).toArray();
-	console.log(result[0]);
 	let data = pug.renderFile("review.pug",{review:result[0]});
 	res.statusCode = 200;
 	res.end(data);
@@ -238,9 +253,6 @@ app.get("/searchresults/:Genre",async(req,res,next)=>{
 	res.send(data);
 });
 app.post("/searchresults",async (req,res,next)=>{
-	console.log(req.body.Title);
-	console.log(req.body.Genre);
-	console.log(req.body.Name);
 	let personResults = [];
 	let results = [];
 	let query = {};
@@ -272,10 +284,8 @@ app.post("/createAccount",async(req,res,next)=>{
 	let user = req.body.username;
 	let pass = req.body.password;
 	//Search first, if username does not exist in username database then add.
-	console.log(req.body.username);
 
 	let users = await db.collection("users").find({name:user}).count();
-	console.log(users);
 	//If username does exist, alert to retry
 	if (users === 0 && req.body.password.length!=0 && req.body.username !=0) {
 		let newUser = {
@@ -286,7 +296,8 @@ app.post("/createAccount",async(req,res,next)=>{
 			watchlist: [],
 			followers: [],
 			following: [],
-			followingActors: []
+			followingPersons: [],
+			users: []
 		}
 		req.session.loggedIn = true;
 		req.session.user = newUser;
@@ -364,7 +375,7 @@ app.post("/addActor",async(req,res,next)=>{
 		let lastID = last[0].ID+1;
 	
 		let count = await db.collection("persons").find({name:actName}).count();
-		console.log(count);
+
 		if(!count){
 			
 			let newAct = {
@@ -502,7 +513,6 @@ app.post("/addMovie",async(req,res,next)=>{
 	}
 
 	db.collection("movies").insertOne(newMovie);
-	console.log(newMovie);
 	//Add new movie to database
 	res.statusCode = 200;
 	res.end("Movie addition Requested!");
@@ -537,11 +547,9 @@ app.post("/addReview",async(req,res,next)=>{
 			full: req.body.fullReview,
 			id: lastID
 		};
-		console.log(newReview);
 		db.collection("reviews").insertOne(newReview);
 
 		db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
-		console.log(req.session.user.name);
 		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
 		
 		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);

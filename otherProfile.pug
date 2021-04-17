@@ -2,7 +2,7 @@ doctype html
 
 html
     head
-        title Others Example Profile
+        title Profile - #{user.name}
         style
             include .\styles\otherProfile.css
 body
@@ -11,7 +11,7 @@ body
         h2 Username: #{user.name}
         div#followingPeople
             h3 Following: 
-            each person in user.followingActors 
+            each person in user.followingPersons
                 br
                 button(name ='person1', onclick='unfollow(person)') Unfollow
                 a(href='/person/'+person)  #{person}
