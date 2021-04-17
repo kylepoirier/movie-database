@@ -177,19 +177,18 @@ app.post("/unfollowPerson", async(req, res,next)=> {
 });
 
 app.post("/followUser", async(req, res,next)=> {
-	console.log(req.session.viewedUsers);
 	let user = req.session.viewedUsers[req.session.viewedUsers.length-1];
 	if (!req.session.loggedIn) {
 		res.redirect("/creation");
 	} else {
 		let check = await db.collection("users").findOne({"name": req.session.user.name, "following":user});
-		if (!(check === null)) {
-			db.collection("users").updateOne({"name": req.session.user.name}, {$pull: {"following": user}});
-			db.collection("users").updateOne({"name": user}, {$pull: {"follower": req.session.user.name}});
-			res.redirect("/user/"+user);
+		if ((check === null)) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$push: {"following": user}});
+			db.collection("users").updateOne({"name": user}, {$push: {"followers": req.session.user.name}});
+			res.redirect("/profile/"+user);
 		} else {
 			console.log("ERROR: Already following user")
-			res.redirect("user/"+user);
+			res.redirect("/profile/"+user);
 		}
 	}
 });
@@ -200,24 +199,24 @@ app.post("/unfollowUser", async(req, res,next)=> {
 		res.redirect("/creation");
 	} else {
 		let check = await db.collection("users").findOne({"name": req.session.user.name, "following":user});
-		if (check === null) {
-			db.collection("users").updateOne({"name": req.session.user.name}, {$push: {"following": user}});
-			db.collection("users").updateOne({"name": user}, {$push: {"follower": req.session.user.name}});
-			res.redirect("/user/"+user);
+		if (!(check === null)) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$pull: {"following": user}});
+			db.collection("users").updateOne({"name": user}, {$pull: {"followers": req.session.user.name}});
+			res.redirect("/profile/"+user);
 		} else {
 			console.log("ERROR: Not following user")
-			res.redirect("user/"+user);
+			res.redirect("/profile/"+user);
 		}
 	}
 });
 
 app.get("/profile/:profile",async(req,res,next)=>{
-	if(req.session.viewedPersons){
-		req.session.viewedPersons.push(req.params.profile);
+	if(req.session.viewedUsers){
+		req.session.viewedUsers.push(req.params.profile);
 
 	}
 	else{
-		req.session.viewedPersons = [req.params.profile];
+		req.session.viewedUsers = [req.params.profile];
 	}
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
 	let data = pug.renderFile("otherProfile.pug",{user:profile[0]});
@@ -340,7 +339,8 @@ app.post("/createAccount",async(req,res,next)=>{
 			followers: [],
 			following: [],
 			followingPersons: [],
-			users: []
+			users: [],
+			notifications: []
 		}
 		req.session.loggedIn = true;
 		req.session.user = newUser;
@@ -470,6 +470,7 @@ async function notify(notifType,notifName){
 		followers.forEach(follower => {
 			db.collection("users").updateOne({"name": follower},{$push:{notifications:newNotif}});
 		});
+	}
 }
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
