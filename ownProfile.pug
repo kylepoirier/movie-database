@@ -60,3 +60,6 @@ body
 
     div#notifications 
         h5 Notification Center:
+        each notif in user.notifications 
+            h #{notif.infoStr}
+            br

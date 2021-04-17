@@ -31,6 +31,7 @@ movies.forEach(async movie =>{
 				writer:[],
 				director:[],
 				actor:[],
+				followers:[],
 				ID:nextPersonID
 			}
 			newPerson.actor.push(movie);
@@ -60,6 +61,7 @@ movies.forEach(async movie =>{
 				writer:[],
 				director:[],
 				actor:[],
+				followers:[],
 				ID:nextPersonID
 			}
 			newPerson.director.push(movie);
@@ -89,6 +91,7 @@ movies.forEach(async movie =>{
 				writer:[],
 				director:[],
 				actor:[],
+				followers:[],
 				ID:nextPersonID
 			}
 			newPerson.writer.push(movie);
