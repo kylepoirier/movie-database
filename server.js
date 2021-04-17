@@ -75,7 +75,7 @@ app.get("/movie/:movieID", async(req,res,next)=>{
 	returnedMovie = await returnMovie(req.params.movieID);
 	
 	let simMovies = await db.collection("movies").find({"Genre":returnedMovie[0].Genre}).toArray();
-	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies});
+	let data = pug.renderFile("movie.pug",{movie:returnedMovie[0], similar:simMovies.slice(0,5)});
 	res.statusCode = 200;
 	res.send(data);
 });
@@ -126,7 +126,8 @@ app.get("/profile", async(req,res,next)=>{
 				
 			}
 		}
-		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies});
+		simMovies.sort(function (a, b) { return 0.5 - Math.random() });
+		let data = await pug.renderFile("ownProfile.pug",{user:profile[0], similar:simMovies.slice(0,5)});
 		res.statusCode = 200;
 		res.end(data);
 
