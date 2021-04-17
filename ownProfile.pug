@@ -10,6 +10,8 @@ body
     include .\header
     div#main
         h1 Username: #{user.name}
+        p (Contributing: #{user.contributor})
+        
     div#userType
         div#switch-field
             <form action="/updateUser" method="POST">
@@ -35,7 +37,6 @@ body
     
         each userID in user.following
             br
-            button(name = 'userID',onclick='unfollow(userID)') Unfollow
             a(href='/profile/'+userID) #{userID}
             br
 
@@ -61,5 +62,5 @@ body
     div#notifications 
         h5 Notification Center:
         each notif in user.notifications 
-            h #{notif.infoStr}
+            a(href=notif.url) #{notif.infoStr}
             br

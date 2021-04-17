@@ -94,6 +94,21 @@ app.get("/addWatchlist", async (req,res,next)=>{
 		res.statusCode = 200;
 	}
 });
+app.get("/removeWatchlist", async (req,res,next)=>{
+	if(!req.session.loggedIn){
+		let data = pug.renderFile("creation.pug");
+		res.statusCode = 200;
+		res.end(data);
+	}
+	else{
+		let array = req.session.viewedMovies;
+		let arraySize = array.length;
+		let newMovie = await returnMovie(req.session.viewedMovies[arraySize-1]);
+		db.collection("users").updateOne({"name":req.session.user.name},{$pull:{"watchlist":newMovie[0]}});
+		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
+		res.statusCode = 200;
+	}
+});
 
 app.get("/profile", async(req,res,next)=>{
 	//Set up to send a user object, which would be the logged in one
@@ -442,17 +457,18 @@ app.post("/addActor",async(req,res,next)=>{
 		//add newAct to database
 		//Refresh page to the actors profile
 		res.statusCode = 200;
-		res.end("Actor addition Requested!");
+		res.redirect("/person/"+actName);
 	}
 	
 });
-async function notify(notifType,notifName){
+async function notify(notifType,notifName,ID){
 	if(notifType==="movie"){
 		let person = await db.collection("persons").findOne({name:notifName});
 		let followers = person.followers;
 		let newNotif={
 			type:notifType,
 			subject:person,
+			url:"/movie/"+ID,
 			infoStr:person.name+" has a role in a new movie",
 		}
 		followers.forEach(follower => {
@@ -465,6 +481,7 @@ async function notify(notifType,notifName){
 		let newNotif={
 			type:notifType,
 			subject:user,
+			url:"/review/"+ID,
 			infoStr:user.name+" has curated a new review!",
 		}
 		followers.forEach(follower => {
@@ -534,7 +551,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			console.log("Person already exists");
 			db.collection("persons").updateOne({"name":directors[i]},{$push:{"director":newMovie}});
-			notify("movie", directors[i]);
+			notify("movie", directors[i],lastID);
 		}
 	}
 	for(let i=0; i<writers.length;i++){
@@ -556,7 +573,7 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			db.collection("persons").updateOne({"name":writers[i]},{$push:{"writer":newMovie}});
 			console.log("Person already exists");
-			notify("movie", writers[i]);
+			notify("movie", writers[i],lastID);
 		}
 	}
 	for(let i=0; i<actors.length;i++){
@@ -578,14 +595,14 @@ app.post("/addMovie",async(req,res,next)=>{
 		else{
 			console.log("Person already exists");
 			db.collection("persons").updateOne({"name":actors[i]},{$push:{"actor":newMovie}});
-			notify("movie", actors[i]);
+			notify("movie", actors[i],lastID);
 		}
 	}
 
 	db.collection("movies").insertOne(newMovie);
 	//Add new movie to database
 	res.statusCode = 200;
-	res.end("Movie addition Requested!");
+	res.redirect("/movie/"+lastID);
 });
 
 app.post("/addReview",async(req,res,next)=>{
@@ -623,6 +640,7 @@ app.post("/addReview",async(req,res,next)=>{
 		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
 		
 		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
+		notify("review",req.session.user.name,lastID)
 		res.statusCode = 200;
 	}
 });

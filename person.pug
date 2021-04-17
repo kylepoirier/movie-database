@@ -26,21 +26,21 @@ body
     div#info
         div#history
             h3 Work History: 
-
-            h4 Writer:
-            each movie in person.writer
-                a(href='/movie/'+movie.ID)  #{movie.Title}
-                br
-
-            h4 Director: 
-            each movie in person.director 
-                a(href='/movie/'+movie.ID) #{movie.Title}
-                br
-        
-            h4 Actor:
-            each movie in person.actor 
-                a(href='/movie/'+movie.ID) #{movie.Title}
-                br
+            if person.writer.length > 0
+                h4 Writer:
+                each movie in person.writer
+                    a(href='/movie/'+movie.ID)  #{movie.Title}
+                    br
+            if person.director.length > 0
+                h4 Director: 
+                each movie in person.director 
+                    a(href='/movie/'+movie.ID) #{movie.Title}
+                    br
+            if person.actor.length > 0
+                h4 Actor:
+                each movie in person.actor 
+                    a(href='/movie/'+movie.ID) #{movie.Title}
+                    br
         div#Collaborator
             h3 Frequent Collaborator:
             each col in person.freqCol 
