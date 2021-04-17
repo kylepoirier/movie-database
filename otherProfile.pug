@@ -7,6 +7,17 @@ html
             include .\styles\otherProfile.css
 body
     include .\header
+    div#buttons
+        div#follow
+            <form action="/followUser" method="POST">
+                <input type="submit" value="Follow" id="follow">
+            </form>
+        div#unfollow    
+            <form action="/unfollowUser" method="POST" id="form2">
+                <input type="submit" value="Unfollow" id="unfollow">
+            </form>
+    br
+    br
     div#info
         h2 Username: #{user.name}
         div#followingPeople

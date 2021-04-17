@@ -174,6 +174,41 @@ app.post("/unfollowPerson", async(req, res,next)=> {
 	}
 });
 
+app.post("/followUser", async(req, res,next)=> {
+	console.log(req.session.viewedUsers);
+	let user = req.session.viewedUsers[req.session.viewedUsers.length-1];
+	if (!req.session.loggedIn) {
+		res.redirect("/creation");
+	} else {
+		let check = await db.collection("users").findOne({"name": req.session.user.name, "following":user});
+		if (!(check === null)) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$pull: {"following": user}});
+			db.collection("users").updateOne({"name": user}, {$pull: {"follower": req.session.user.name}});
+			res.redirect("/user/"+user);
+		} else {
+			console.log("ERROR: Already following user")
+			res.redirect("user/"+user);
+		}
+	}
+});
+
+app.post("/unfollowUser", async(req, res,next)=> {
+	let user = req.session.viewedUsers[req.session.viewedUsers.length-1];
+	if (!req.session.loggedIn) {
+		res.redirect("/creation");
+	} else {
+		let check = await db.collection("users").findOne({"name": req.session.user.name, "following":user});
+		if (check === null) {
+			db.collection("users").updateOne({"name": req.session.user.name}, {$push: {"following": user}});
+			db.collection("users").updateOne({"name": user}, {$push: {"follower": req.session.user.name}});
+			res.redirect("/user/"+user);
+		} else {
+			console.log("ERROR: Not following user")
+			res.redirect("user/"+user);
+		}
+	}
+});
+
 app.get("/profile/:profile",async(req,res,next)=>{
 	let profile = await db.collection("users").find({name : req.params.profile}).toArray();
 	let data = pug.renderFile("otherProfile.pug",{user:profile[0]});
