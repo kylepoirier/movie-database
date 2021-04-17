@@ -623,25 +623,29 @@ app.post("/addReview",async(req,res,next)=>{
 			let last = await db.collection("reviews").find({}).sort({_id:-1}).limit(1).toArray();
 			lastID = last[0].id +1;
 		}
+		if(Number(req.body.reviewScore)> 10 || Number(req.body.reviewScore <0)){
+			console.log("ERROR: Invalid review score, enter value between 0-10");
+		}else{
+			let array = req.session.viewedMovies;
+			let arraySize = array.length;
+			let newReview = {
+				reviewer: req.session.user.name,
+				movie: req.session.viewedMovies[arraySize-1],
+				score: req.body.reviewScore+"/10",
+				sum: req.body.sumReview,
+				full: req.body.fullReview,
+				id: lastID
+			};
+			db.collection("reviews").insertOne(newReview);
 	
-		let array = req.session.viewedMovies;
-		let arraySize = array.length;
-		let newReview = {
-			reviewer: req.session.user.name,
-			movie: req.session.viewedMovies[arraySize-1],
-			score: req.body.reviewScore,
-			sum: req.body.sumReview,
-			full: req.body.fullReview,
-			id: lastID
-		};
-		db.collection("reviews").insertOne(newReview);
-
-		db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
-		db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
+			db.collection("movies").updateOne({"ID":Number(req.session.viewedMovies[arraySize-1])},{$push:{"Reviews":newReview}});
+			db.collection("users").updateOne({"name":req.session.user.name},{$push:{"reviews":newReview}});
+			
+			res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
+			notify("review",req.session.user.name,lastID)
+			res.statusCode = 200;
+		}
 		
-		res.redirect("/movie/"+req.session.viewedMovies[arraySize-1]);
-		notify("review",req.session.user.name,lastID)
-		res.statusCode = 200;
 	}
 });
 
