@@ -435,6 +435,7 @@ async function notify(notifType,notifName){
 		followers.forEach(follower => {
 			db.collection("users").updateOne({"name": follower},{$push:{notifications:newNotif}});
 		});
+	}
 }
 app.post("/addMovie",async(req,res,next)=>{
 	let last = await db.collection("movies").find({}).sort({_id:-1}).limit(1).toArray();
