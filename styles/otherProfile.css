@@ -1,11 +1,16 @@
 h1{
     color:#bf616a;
+    text-align: center;
+}
+h2 {
+    color: #88c0d0;
+    text-align: center;
 }
 h3 {
-    color:#88c0d0;
+    color:#EBCB8B;
 }
 h4 {
-    color:#b48ead
+    color: #b48ead;
 }
 body {
     background-color: #2e3440;
@@ -16,21 +21,21 @@ body {
 }
 #info {
     margin: auto;
-    width: 30%;
-    border: 3px solid #434c5e;
-    padding: 25px;
-    background-color: #3b4252;
+    width: 35%;
+    border: 3px solid #3b4252;
+    padding: 10px;
+    background-color: #434c5e;
     text-align: left;
-    border-radius: 20px;
+    border-radius: 10px;
 }
-
 #buttons {
-    display: block;
-    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
 #follow {
-    display: inline-block;
+    text-align: center;
 }
 
 #unfollow {

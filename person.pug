@@ -42,8 +42,9 @@ body
                     a(href='/movie/'+movie.ID) #{movie.Title}
                     br
         div#Collaborator
-            h3 Frequent Collaborator:
-            each col in person.freqCol 
-                a(href='/profile'+col) #{col}
-                br
+            if person.freqCol.length > 0
+                h3 Frequent Collaborator:
+                each col in person.freqCol 
+                    a(href='/profile'+col) #{col}
+                    br
         

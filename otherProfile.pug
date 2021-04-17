@@ -7,45 +7,45 @@ html
             include .\styles\otherProfile.css
 body
     include .\header
-    div#buttons
-        div#follow
-            <form action="/followUser" method="POST">
-                <input type="submit" value="Follow" id="follow">
-            </form>
-        div#unfollow    
-            <form action="/unfollowUser" method="POST" id="form2">
-                <input type="submit" value="Unfollow" id="unfollow">
-            </form>
-    br
-    br
+    div#main
+        br
+        br
+        h1 PogChamp movieDB
     div#info
         h2 Username: #{user.name}
+        div#buttons
+            div#follow
+                <form action="/followUser" method="POST">
+                    <input type="submit" value="Follow" id="follow">
+                </form>
+            div#unfollow    
+                <form action="/unfollowUser" method="POST" id="form2">
+                    <input type="submit" value="Unfollow" id="unfollow">
+                </form>
+            br
         div#followingPeople
-            h3 Following: 
-            each person in user.followingPersons
-                br
-                
-                a(href='/person/'+person)  #{person}
-                br
-
+            if user.followingPersons.length > 0
+                h3 Following: 
+                each person in user.followingPersons
+                    a(href='/person/'+person)  #{person}
+                    br
         div#followingUser
-            h3 Users Following: 
-            each userID in user.following
-                br
-                
-                a(href='/profile/'+userID) #{userID}
-                br
-
+            if user.following.length > 0
+                h3 Users Following: 
+                each userID in user.following
+                    a(href='/profile/'+userID) #{userID}
+                    br
         div#WatchList
-            h3 Watch List: 
-            each movie in user.watchlist
-                br 
-                a(href='/movie/'+movie.ID) #{movie.Title}
-                br
-
+            if user.watchlist.length > 0
+                h3 Watch List: 
+                each movie in user.watchlist
+                    a(href='/movie/'+movie.ID) #{movie.Title}
+                    br
         div#Reviews 
-            h3 Reviews Written: 
-            each review in user.reviews 
-                a(href="/review/"+review.id) Review
-                h  Score: #{review.score}
-                h  Summary: #{review.sum}
+            if user.reviews.length > 0
+                h3 Reviews Written: 
+                each review in user.reviews 
+                    a(href="/review/"+review.id) Review
+                    h  Score: #{review.score}
+                    h  Summary: #{review.sum}
+        br

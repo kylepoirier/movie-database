@@ -2,26 +2,25 @@ doctype html
 
 html
     head
-        title Search Results
+        title PogDB - Search Results
         style
             include .\styles\searchResults.css
 body
     include .\header
     div#main
-    h1 Search Results
-    h2 List of Movies That Match Parameters:
-
-    
-    if movies.length >= 1
-        b Movies 
-        br
-        each movie in movies
-            a(href="/movie/" + movie.ID) #{movie.Title}
-            br
-    
-    if persons.length >= 1
-        b Persons
-        br
-        each person in persons 
-            a(href="/person/"+person.name) #{person.name}
+    br
+    br
+    h1 PogChamp movieDB
+    h2 Search Results
+    div#info
+        if movies.length >= 1
+            h3 Movies:
+            each movie in movies
+                a(href="/movie/" + movie.ID) #{movie.Title}
+                br
+        if persons.length >= 1
+            h3 People:
+            each person in persons 
+                a(href="/person/"+person.name) #{person.name}
+                br
             br

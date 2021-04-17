@@ -12,10 +12,3 @@ label{
     width: 80px;
     display:inline-block;
 }
-a:link {
-    color: #88c0d0;
-}
-
-a:visited {
-    color: #b48ead;
-}

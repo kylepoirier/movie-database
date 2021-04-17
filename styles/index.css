@@ -2,13 +2,6 @@ h1{
     color:#bf616a;
     text-align: center;
 }
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width:300px; /* you can use % */
-    height: auto;
-}
 body {
     background-color: #2e3440;
     color:#EBCB8B;
@@ -16,23 +9,6 @@ body {
     font-weight: 300;
     text-align: center;
     line-height: 1.2;
-}
-
-a:link {
-    color: #8fbcbb;
-}
-
-a:visited {
-    color: #8fbcbb;
-}
-
-a {
-    text-decoration: none;
-}
-
-a:hover {
-    color: #5b9190;
-    transition-duration: 500ms;
 }
 
 
@@ -43,6 +19,7 @@ a:hover {
     padding: 10px;
     background-color: #434c5e;
     text-align: left;
+    border-radius: 10px;
 }
 
 #next {
