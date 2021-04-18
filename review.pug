@@ -8,17 +8,17 @@ html
 body
     include .\header
     div#main
-        div#reviewer
-            h1 Reviewer: #{review.reviewer}
+        br
+        br
+        h1 PogChamp movieDB
+    div#info
+        h2 Review by: #{review.reviewer}
         div#movie
             a(href="/movie/"+review.movie) See Movie
-    div#review
-        h2 Score: #{review.score}
-        br
-        b Summary Text: 
+        h3 Score:
+        p #{review.score}
+        h3 Summary Text: 
         p #{review.sum}
-        br
-        br
 
-        b Full Text: 
+        h3 Full Text: 
         p #{review.full}

@@ -3,46 +3,47 @@ html(lang='en')
 
 html
     head
-        title Contribute
+        title PogDB - Contribute
         style
             include .\styles\contribute.css
 body
     include .\header
     br
     br
-    b Add an Actor:
-    br 
     br
-<form action="/addActor" method="POST">
-    <label for="actorName">Actor Name:   </label>
-    <input id="actorName" type="text" name="actorName">
-    <input type="submit" value="Add Actor">
-</form>
-br
-b Add a Movie:
-br 
-br 
-<form action="/addMovie" method="POST">
-    <label for="title">Title:   </label>
-    <input id="title" type="text" name="title">
-    br
-    <label for="runtime">Runtime: </label>
-    <input id="runtime" type="text" name="runtime">
-    br
-    <label for="releaseYear">Release Year: </label>
-    <input id="releaseYear" type="text" name="releaseYear">
-    br
-    <label for="genre">Genre: </label>
-    <input id="genre" type="text" name="genre">
-    br
-    <label for="Writers">Writers: </label>
-    <input id="Writers" type="text" name="writers">
-    br
-    <label for="directors">Directors: </label>
-    <input id="directors" type="text" name="directors">
-    br
-    <label for="actors">Actors: </label>
-    <input id="actors" type="text" name="actors">
-    br
-    <input type="submit" value="Add Movie">
-</form>
+    h1 PogChamp movieDB
+    div#info
+        h3 Add an Actor:
+        <form action="/addActor" method="POST">
+            <label for="actorName">Actor Name:   </label>
+            <input id="actorName" type="text" name="actorName">
+            <input type="submit" value="Add Actor">
+        </form>
+        br
+        h3 Add a Movie:
+        <form action="/addMovie" method="POST">
+            <label for="title">Title:   </label>
+            <input id="title" type="text" name="title">
+            br
+            <label for="runtime">Runtime: </label>
+            <input id="runtime" type="text" name="runtime">
+            br
+            <label for="releaseYear">Release Year: </label>
+            <input id="releaseYear" type="text" name="releaseYear">
+            br
+            <label for="genre">Genre: </label>
+            <input id="genre" type="text" name="genre">
+            br
+            <label for="Writers">Writers: </label>
+            <input id="Writers" type="text" name="writers">
+            br
+            <label for="directors">Directors: </label>
+            <input id="directors" type="text" name="directors">
+            br
+            <label for="actors">Actors: </label>
+            <input id="actors" type="text" name="actors">
+            br
+            br
+            <input type="submit" value="Add Movie">
+        </form>
+        br

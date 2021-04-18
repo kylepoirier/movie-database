@@ -14,7 +14,7 @@ h4 {
 }
 body {
     background-color: #2e3440;
-    color:#EBCB8B;
+    color:#dddddd;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
     text-align: center;
@@ -28,4 +28,7 @@ body {
     background-color: #434c5e;
     text-align: left;
     border-radius: 10px;
+}
+#switch-field {
+    color: #EBCB8B;
 }

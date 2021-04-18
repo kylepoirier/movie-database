@@ -1,12 +1,14 @@
 h1{
-    color:#CB5B44
-}
-body {
-    background-color: #FFD8B2;
-    color:#FF7F4A;
-}
-h1{
     color:#bf616a;
+    text-align: center;
+}
+h2 {
+    color:#EBCB8B;
+    text-align: center;
+}
+h3{
+    color:#88c0d0;
+    text-align: center;
 }
 body {
     background-color: #2e3440;
@@ -19,10 +21,12 @@ label{
     width: 100px;
     display:inline-block;
 }
-a:link {
-    color: #88c0d0;
-}
-
-a:visited {
-    color: #b48ead;
+#info {
+    margin: auto;
+    width: 30%;
+    border: 3px solid #434c5e;
+    padding: 10px;
+    background-color: #3b4252;
+    text-align: center;
+    border-radius: 10px;
 }

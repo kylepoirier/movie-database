@@ -1,40 +1,35 @@
-#movie{
-    color:#7996b9;
+h1{
+    color:#bf616a;
     text-align: center;
 }
-img {
-    display: block;
-    margin-left: auto;
-    margin-right: auto;
-    width:300px; /* you can use % */
-    height: auto;
+h2 {
+    color: #EBCB8B; 
+    text-align: center;
+}
+h3 {
+    color:#88c0d0;
+}
+h4 {
+    color: #b48ead;
 }
 body {
     background-color: #2e3440;
-    color:#EBCB8B;
+    color:#dddddd;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
     text-align: center;
+    line-height: 1.2;
 }
-
-a:link {
-    color: #88c0d0;
-}
-
-a:visited {
-    color: #b48ead;
-}
-#review {
+#info {
     margin: auto;
-    width: 40%;
+    width: 35%;
     border: 3px solid #3b4252;
     padding: 10px;
     background-color: #434c5e;
     text-align: left;
+    border-radius: 10px;
 }
-h2 {
+
+#movie {
     text-align: center;
-}
-#reviewer { 
-    color:#8fbcbb;
 }

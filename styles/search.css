@@ -1,14 +1,30 @@
 h1{
     color:#bf616a;
+    text-align: center;
+}
+h2{
+    color:#88c0d0;
+    text-align: center;
 }
 body {
     background-color: #2e3440;
-    color:#EBCB8B;
+    color:#ebcb8b;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif; 
     font-weight: 300;
     text-align: center;
 }
+
 label{
-    width: 80px;
+    width: 100px;
     display:inline-block;
+}
+
+#info {
+    margin: auto;
+    width: 20%;
+    border: 3px solid #434c5e;
+    padding: 10px;
+    background-color: #3b4252;
+    text-align: center;
+    border-radius: 10px;
 }

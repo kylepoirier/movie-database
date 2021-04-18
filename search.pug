@@ -2,7 +2,7 @@ doctype html
 
 html
     head
-        title Search
+        title PogDB - Search
         style
             include .\styles\search.css
 body
@@ -10,16 +10,21 @@ body
     br 
     br 
     br
-<form action="/searchresults" method="POST">
-    <label for="Title">Title:   </label>
-    <input id="Title" type="text" name="Title">
-    br
-    <label for="Genre">Genre: </label>
-    <input id="Genre" type="text" name="Genre">
-    br
-    <label for="Name">Name: </label>
-    <input id="Name" type="text" name="Name">
-    br 
-    br 
-    <input type="submit" value="Search">
-</form>
+    div#main 
+        h1 PogChamp movieDB
+    div#info
+        h2 Search
+        <form action="/searchresults" method="POST">
+            <label for="Title">Title:   </label>
+            <input id="Title" type="text" name="Title">
+            br
+            <label for="Genre">Genre: </label>
+            <input id="Genre" type="text" name="Genre">
+            br
+            <label for="Name">Name: </label>
+            <input id="Name" type="text" name="Name">
+            br 
+            br 
+            <input type="submit" value="Search">
+        </form>
+        br

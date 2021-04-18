@@ -45,7 +45,8 @@ body
             if user.reviews.length > 0
                 h3 Reviews Written: 
                 each review in user.reviews 
-                    a(href="/review/"+review.id) Review
-                    h  Score: #{review.score}
-                    h  Summary: #{review.sum}
+                    h  Score: #{review.score} |
+                    h  Summary: #{review.sum} |   
+                    a(href="/review/"+review.id) View Details
+                    br
         br
