@@ -525,9 +525,9 @@ app.post("/addMovie",async(req,res,next)=>{
 		Director:directors,
 		Writer: writers,
 		Actors: actors,
-		Plot: "Empty",
-		Awards: "Empty",
-		Poster: "Empty",
+		Plot: "N/A",
+		Awards: "N/A",
+		Poster: "http://underscoremusic.co.uk/site/wp-content/uploads/2014/05/no-poster.jpg",
 		ID:lastID,
 		Reviews: []
 	}
