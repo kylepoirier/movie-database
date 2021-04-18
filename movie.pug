@@ -8,36 +8,39 @@ html
             include .\styles\movie.css
 body
     include .\header
-    div#main
+    div#main 
+        br
+        br
+        h1 PogChamp movieDB
+    div#info
         h2 #{movie.Title}
         div#img
             img(src = movie.Poster)
             br
-            <form action="/addWatchlist" method="GET">
-                <input type="submit" value="Add to watchlist">
-            </form>
-            <form action="/removeWatchlist" method="GET">
-                <input type="submit" value="Remove from watchlist">
-            </form>
-        div#info
+            div#buttons
+                <form action="/addWatchlist" method="GET">
+                    <input type="submit" value="Add to watchlist">
+                </form>
+                <form action="/removeWatchlist" method="GET">
+                    <input type="submit" value="Remove from watchlist">
+                </form>
+            br
+        div#movieinfo
             h3 Movie Info: 
-            b Plot: #{movie.Plot}
-            br
-            b Year: #{movie.Year}
-            br
-            b Rated: #{movie.Rated}
-            br
-            b Released: #{movie.Released}
-            br
-            b Runtime: #{movie.Runtime} 
-            br 
-            br
-            b Genre:
+            h4 Plot: 
+            p #{movie.Plot}
+            h4 Year: 
+            p #{movie.Year}
+            h4 Rated: 
+            p #{movie.Rated}
+            h4 Released: 
+            p #{movie.Released}
+            h4 Runtime: 
+            p #{movie.Runtime} 
+            h4 Genre:
             each genre in movie.Genre
-                br
                 a(href="/searchresults/"+genre) #{genre}
-            br
-            br
+                br
             div#people
                 h3 Credits: 
                 b Director:
@@ -61,27 +64,25 @@ body
                 h3 Awards: 
                 b #{movie.Awards} 
             div#similar 
-                h4 Similar Movies: 
+                h3 Similar Movies: 
                 each sim in similar 
-                    br 
                     a(href="/movie/"+sim.ID) #{sim.Title}
+                    br
+            div#review
+                h3 Reviews:
+                each review in movie.Reviews
+                    br
+                    h Reviewer: 
+                    a(href="/profile/"+review.reviewer) #{review.reviewer}
+                    br
+                    h Score: #{review.score}
+                    br 
+                    h Summary: #{review.sum}
+                    br
+                    a(href="/review/"+review.id) Full Review
+                    br
+                    br
         div#reviews 
-            h3 Reviews:
-            each review in movie.Reviews
-                br
-                h Reviewer: 
-                a(href="/profile/"+review.reviewer) #{review.reviewer}
-                br
-                h Score: #{review.score}
-                br 
-                h Summary: #{review.sum}
-                br
-                a(href="/review/"+review.id) Full Review
-                br
-                br
-
-            
-
             <form action="/addReview" method="POST">
                 <label for="reviewScore">Review Score: </label>
                 <input id="reviewScore" type="text" name="reviewScore">
