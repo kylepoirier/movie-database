@@ -54,13 +54,11 @@ img {
     background-color: #434c5e;
     text-align: left;
 }
-
 #buttons {
     display: flex;
     justify-content: center;
     align-items: center;
   }
-
 label{
     width: 150px;
     display:inline-block;

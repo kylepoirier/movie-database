@@ -33,11 +33,9 @@ body {
     justify-content: center;
     align-items: center;
 }
-
 #follow {
     text-align: center;
 }
-
 #unfollow {
     display: inline-block;
 }

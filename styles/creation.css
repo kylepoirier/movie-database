@@ -13,12 +13,10 @@ body {
     font-weight: 300;
     text-align: center;
 }
-
 label{
     width: 100px;
     display:inline-block;
 }
-
 #info {
     margin: auto;
     width: 30%;

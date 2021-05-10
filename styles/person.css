@@ -23,16 +23,13 @@ body {
     text-align: left;
     border-radius: 20px;
 }
-
 #buttons {
     display: block;
     margin: 0 auto;
   }
-
 #follow {
     display: inline-block;
 }
-
 #unfollow {
     display: inline-block;
 }

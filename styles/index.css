@@ -10,8 +10,6 @@ body {
     text-align: center;
     line-height: 1.2;
 }
-
-
 #info {
     margin: auto;
     width: 25%;
@@ -21,15 +19,12 @@ body {
     text-align: left;
     border-radius: 10px;
 }
-
 #next {
     text-align: center;
 }
-
 #prev {
     width: 100%;
 }
-
 #page {
     padding: 0.5em;
     margin: auto;
