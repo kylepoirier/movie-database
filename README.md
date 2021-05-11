@@ -13,7 +13,7 @@ Users can login or create an account on this page.
 ![user-profile](https://cdn.discordapp.com/attachments/623956017134305381/841449670608814120/unknown.png)
 
 **Account Page:**
-Users can view the people/users they follow, the reviews they've written, and the movies they added to their watchlist. (Also includes a movie recommending algorithm and notification center)
+Users can view the people/users they follow, the reviews they've written, and the movies they've added to their watchlist. (Also includes a movie recommending algorithm and notification center)
 
 **To see the full website...**
 
